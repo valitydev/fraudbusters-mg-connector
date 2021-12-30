@@ -9,7 +9,6 @@ import com.rbkmoney.woody.api.flow.error.WUnavailableResultException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.connect.errors.RetriableException;
-import org.apache.thrift.TApplicationException;
 import org.apache.thrift.TException;
 import org.springframework.stereotype.Service;
 
