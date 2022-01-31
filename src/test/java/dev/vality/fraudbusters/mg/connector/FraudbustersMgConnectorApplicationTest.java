@@ -139,7 +139,7 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
     }
 
     private void mockPaymentWithException(String sourceId) throws TException, IOException {
-        when(invoicingClient.get(HgClientService.USER_INFO, sourceId, eventRangeFactory.create(4)))
+        when(invoicingClient.get(HgClientService.USER_INFO, sourceId, eventRangeFactory.create(6)))
                 .thenThrow(new RuntimeException())
                 .thenReturn(BuildUtils.buildInvoice(MgEventSinkFlowGenerator.PARTY_ID, MgEventSinkFlowGenerator.SHOP_ID,
                         sourceId, "1", "1", "1",
