@@ -5,10 +5,8 @@ import com.rbkmoney.damsel.domain.*;
 import com.rbkmoney.damsel.payment_processing.InvoicePayment;
 import com.rbkmoney.damsel.payment_processing.InvoicePaymentChargeback;
 import com.rbkmoney.damsel.payment_processing.InvoiceRefundSession;
-import com.rbkmoney.fistful.base.CardType;
-import com.rbkmoney.fistful.base.DigitalData;
-import com.rbkmoney.fistful.base.DigitalDataWebmoney;
-import com.rbkmoney.fistful.base.Residence;
+import dev.vality.fistful.base.CardType;
+import dev.vality.fistful.base.Residence;
 import com.rbkmoney.geck.common.util.TypeUtil;
 import com.rbkmoney.geck.serializer.kit.mock.MockMode;
 import com.rbkmoney.geck.serializer.kit.mock.MockTBaseProcessor;
@@ -26,31 +24,31 @@ import static com.rbkmoney.fraudbusters.mg.connector.utils.MgEventSinkFlowGenera
 
 public class BuildUtils {
 
-    public static com.rbkmoney.fistful.base.BankCard buildFistfulBankCard() {
-        return new com.rbkmoney.fistful.base.BankCard()
+    public static dev.vality.fistful.base.BankCard buildFistfulBankCard() {
+        return new dev.vality.fistful.base.BankCard()
                 .setBankName(InvoiceTestConstant.BANK_NAME)
                 .setBin(InvoiceTestConstant.CARD_BIN)
                 .setCategory(InvoiceTestConstant.CARD_CATEGORY)
                 .setIssuerCountry(Residence.PAN)
-                .setPaymentSystem(new com.rbkmoney.fistful.base.PaymentSystemRef(
-                        com.rbkmoney.fistful.base.LegacyBankCardPaymentSystem.mastercard.name()))
+                .setPaymentSystem(new dev.vality.fistful.base.PaymentSystemRef(
+                        dev.vality.fistful.base.LegacyBankCardPaymentSystem.mastercard.name()))
                 .setToken(InvoiceTestConstant.CARD_TOKEN_PROVIDER)
                 .setMaskedPan(InvoiceTestConstant.CARD_MASKED_PAN)
                 .setCardType(CardType.debit)
                 .setCardholderName(InvoiceTestConstant.CARDHOLDER_NAME);
     }
 
-    public static com.rbkmoney.fistful.base.CryptoWallet buildFistfulCryptoWallet() {
-        com.rbkmoney.fistful.base.CryptoWallet cryptoWallet = new com.rbkmoney.fistful.base.CryptoWallet();
+    public static dev.vality.fistful.base.CryptoWallet buildFistfulCryptoWallet() {
+        dev.vality.fistful.base.CryptoWallet cryptoWallet = new dev.vality.fistful.base.CryptoWallet();
         cryptoWallet.setId("id");
-        cryptoWallet.setCurrency(com.rbkmoney.fistful.base.CryptoCurrency.bitcoin);
+        cryptoWallet.setCurrency(dev.vality.fistful.base.CryptoCurrency.bitcoin);
         return cryptoWallet;
     }
 
-    public static com.rbkmoney.fistful.base.DigitalWallet buildFistfulDigitalWallet() {
-        com.rbkmoney.fistful.base.DigitalWallet digitalWallet = new com.rbkmoney.fistful.base.DigitalWallet();
+    public static dev.vality.fistful.base.DigitalWallet buildFistfulDigitalWallet() {
+        dev.vality.fistful.base.DigitalWallet digitalWallet = new dev.vality.fistful.base.DigitalWallet();
         digitalWallet.setId("id");
-        digitalWallet.setData(DigitalData.webmoney(new DigitalDataWebmoney()));
+        digitalWallet.setPaymentService(new dev.vality.fistful.base.PaymentServiceRef("webmoney"));
         return digitalWallet;
     }
 

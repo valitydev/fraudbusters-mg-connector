@@ -1,7 +1,7 @@
 package com.rbkmoney.fraudbusters.mg.connector.config;
 
 import com.rbkmoney.damsel.payment_processing.InvoicingSrv;
-import com.rbkmoney.fistful.withdrawal.ManagementSrv;
+import dev.vality.fistful.withdrawal.ManagementSrv;
 import com.rbkmoney.woody.thrift.impl.http.THSpawnClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -33,21 +33,21 @@ public class HgConfig {
     }
 
     @Bean
-    public com.rbkmoney.fistful.destination.ManagementSrv.Iface destinationClient(
+    public dev.vality.fistful.destination.ManagementSrv.Iface destinationClient(
             @Value("${service.destination.url}") Resource resource,
             @Value("${service.destination.networkTimeout}") int networkTimeout) throws IOException {
         return new THSpawnClientBuilder()
                 .withNetworkTimeout(networkTimeout)
-                .withAddress(resource.getURI()).build(com.rbkmoney.fistful.destination.ManagementSrv.Iface.class);
+                .withAddress(resource.getURI()).build(dev.vality.fistful.destination.ManagementSrv.Iface.class);
     }
 
     @Bean
-    public com.rbkmoney.fistful.wallet.ManagementSrv.Iface walletClient(
+    public dev.vality.fistful.wallet.ManagementSrv.Iface walletClient(
             @Value("${service.wallet.url}") Resource resource,
             @Value("${service.wallet.networkTimeout}") int networkTimeout) throws IOException {
         return new THSpawnClientBuilder()
                 .withNetworkTimeout(networkTimeout)
-                .withAddress(resource.getURI()).build(com.rbkmoney.fistful.wallet.ManagementSrv.Iface.class);
+                .withAddress(resource.getURI()).build(dev.vality.fistful.wallet.ManagementSrv.Iface.class);
     }
 
 }

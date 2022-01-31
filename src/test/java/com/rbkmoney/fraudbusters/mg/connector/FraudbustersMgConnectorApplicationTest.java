@@ -4,8 +4,8 @@ import com.rbkmoney.damsel.domain.*;
 import com.rbkmoney.damsel.fraudbusters.Payment;
 import com.rbkmoney.damsel.payment_processing.Invoice;
 import com.rbkmoney.damsel.payment_processing.InvoicingSrv;
-import com.rbkmoney.fistful.withdrawal.ManagementSrv;
-import com.rbkmoney.fistful.withdrawal.WithdrawalState;
+import dev.vality.fistful.withdrawal.ManagementSrv;
+import dev.vality.fistful.withdrawal.WithdrawalState;
 import com.rbkmoney.fraudbusters.mg.connector.factory.EventRangeFactory;
 import com.rbkmoney.fraudbusters.mg.connector.mapper.impl.WithdrawalBeanUtils;
 import com.rbkmoney.fraudbusters.mg.connector.serde.deserializer.ChargebackDeserializer;
@@ -58,9 +58,9 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
     @MockBean
     ManagementSrv.Iface fistfulClient;
     @MockBean
-    com.rbkmoney.fistful.destination.ManagementSrv.Iface destinationClient;
+    dev.vality.fistful.destination.ManagementSrv.Iface destinationClient;
     @MockBean
-    com.rbkmoney.fistful.wallet.ManagementSrv.Iface walletClient;
+    dev.vality.fistful.wallet.ManagementSrv.Iface walletClient;
 
     @Autowired
     private EventRangeFactory eventRangeFactory;

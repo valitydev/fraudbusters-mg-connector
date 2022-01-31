@@ -16,14 +16,14 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class FistfulResourceToDomainResourceConverter
-        implements Converter<com.rbkmoney.fistful.base.Resource, Resource> {
+        implements Converter<dev.vality.fistful.base.Resource, Resource> {
 
     public static final PaymentSystemRef DEFAULT_PAYMENT_SYSTEM =
             new PaymentSystemRef(LegacyBankCardPaymentSystem.visa.name());
     public static final String UNKNOWN = "UNKNOWN";
 
     @Override
-    public Resource convert(com.rbkmoney.fistful.base.Resource fistfulResource) {
+    public Resource convert(dev.vality.fistful.base.Resource fistfulResource) {
         log.debug("Start convert fistfulResource : {}", fistfulResource);
         Resource resource = new Resource();
         if (fistfulResource.isSetBankCard()) {
@@ -37,9 +37,9 @@ public class FistfulResourceToDomainResourceConverter
         } else if (fistfulResource.isSetDigitalWallet()) {
             DigitalWallet digitalWallet = new DigitalWallet()
                     .setId(fistfulResource.getDigitalWallet().getDigitalWallet().getId());
-            if (fistfulResource.getDigitalWallet().getDigitalWallet().getData() != null) {
+            if (fistfulResource.getDigitalWallet().getDigitalWallet().getPaymentService() != null) {
                 digitalWallet.setDigitalDataProvider(fistfulResource.getDigitalWallet()
-                        .getDigitalWallet().getData().getSetField().getFieldName());
+                        .getDigitalWallet().getPaymentService().getId());
             }
             resource.setDigitalWallet(digitalWallet);
         } else {
@@ -50,14 +50,14 @@ public class FistfulResourceToDomainResourceConverter
         return resource;
     }
 
-    private BankCard convertBankCard(com.rbkmoney.fistful.base.BankCard bankCardFrom) {
+    private BankCard convertBankCard(dev.vality.fistful.base.BankCard bankCardFrom) {
         BankCard bankCard = new BankCard();
         bankCard.setToken(bankCardFrom.getToken());
         bankCard.setIssuerCountry(bankCardFrom.isSetIssuerCountry()
                 ? CountryCode.valueOf(bankCardFrom.getIssuerCountry().name())
                 : null);
         bankCard.setPaymentSystem(bankCardFrom.isSetPaymentSystem()
-                ? new PaymentSystemRef(PaymentSystemUtil.getFistfulPaymentSystemName(bankCardFrom))
+                ? new PaymentSystemRef(bankCardFrom.getPaymentSystem().getId())
                 : DEFAULT_PAYMENT_SYSTEM);
         bankCard.setLastDigits(bankCardFrom.getMaskedPan() != null
                 ? bankCardFrom.getMaskedPan()

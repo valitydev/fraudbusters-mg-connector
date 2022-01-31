@@ -2,11 +2,11 @@ package com.rbkmoney.fraudbusters.mg.connector.mapper.impl;
 
 import com.rbkmoney.damsel.fraudbusters.Withdrawal;
 import com.rbkmoney.damsel.fraudbusters.WithdrawalStatus;
-import com.rbkmoney.fistful.withdrawal.TimestampedChange;
-import com.rbkmoney.fistful.withdrawal.WithdrawalState;
-import com.rbkmoney.fistful.withdrawal.status.Failed;
-import com.rbkmoney.fistful.withdrawal.status.Pending;
-import com.rbkmoney.fistful.withdrawal.status.Status;
+import dev.vality.fistful.withdrawal.TimestampedChange;
+import dev.vality.fistful.withdrawal.WithdrawalState;
+import dev.vality.fistful.withdrawal.status.Failed;
+import dev.vality.fistful.withdrawal.status.Pending;
+import dev.vality.fistful.withdrawal.status.Status;
 import com.rbkmoney.fraudbusters.mg.connector.converter.FistfulAccountToDomainAccountConverter;
 import com.rbkmoney.fraudbusters.mg.connector.converter.FistfulCashToDomainCashConverter;
 import com.rbkmoney.fraudbusters.mg.connector.converter.FistfulCurrencyToDomainCurrencyConverter;

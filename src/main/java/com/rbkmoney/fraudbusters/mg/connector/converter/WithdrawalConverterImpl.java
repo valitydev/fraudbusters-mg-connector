@@ -1,6 +1,6 @@
 package com.rbkmoney.fraudbusters.mg.connector.converter;
 
-import com.rbkmoney.fistful.withdrawal.TimestampedChange;
+import dev.vality.fistful.withdrawal.TimestampedChange;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TDeserializer;
 import org.apache.thrift.TException;

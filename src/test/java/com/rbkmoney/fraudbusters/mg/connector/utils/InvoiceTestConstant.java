@@ -1,8 +1,8 @@
 package com.rbkmoney.fraudbusters.mg.connector.utils;
 
-import com.rbkmoney.fistful.base.CardType;
-import com.rbkmoney.fistful.base.LegacyBankCardPaymentSystem;
-import com.rbkmoney.fistful.base.Residence;
+import dev.vality.fistful.base.CardType;
+import dev.vality.fistful.base.LegacyBankCardPaymentSystem;
+import dev.vality.fistful.base.Residence;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
