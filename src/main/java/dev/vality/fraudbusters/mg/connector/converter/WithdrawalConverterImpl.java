@@ -13,13 +13,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class WithdrawalConverterImpl implements BinaryConverter<TimestampedChange> {
 
-    ThreadLocal<TDeserializer> thriftDeserializerThreadLocal = ThreadLocal.withInitial(this::createDeserializer);
+    private ThreadLocal<TDeserializer> threadLocalDeserializer = ThreadLocal.withInitial(this::createDeserializer);
 
     @Override
     public TimestampedChange convert(byte[] bin, Class<TimestampedChange> clazz) {
         TimestampedChange event = new TimestampedChange();
         try {
-            thriftDeserializerThreadLocal.get().deserialize(event, bin);
+            threadLocalDeserializer.get().deserialize(event, bin);
         } catch (TException e) {
             log.error("Error when convert TimestampedChange e: ", e);
         }

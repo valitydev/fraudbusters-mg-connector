@@ -91,7 +91,7 @@ public class GeneralInfoInitiator implements InfoInitializer<InvoicePaymentStatu
         return null;
     }
 
-    public ReferenceInfo initReferenceInfo(dev.vality.damsel.domain.Invoice invoice) {
+    public ReferenceInfo initReferenceInfo(Invoice invoice) {
         return ReferenceInfo.merchant_info(new MerchantInfo()
                 .setPartyId(invoice.getOwnerId())
                 .setShopId(invoice.getShopId())

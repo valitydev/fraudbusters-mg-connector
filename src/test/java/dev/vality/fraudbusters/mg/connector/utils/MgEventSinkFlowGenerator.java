@@ -1,13 +1,14 @@
 package dev.vality.fraudbusters.mg.connector.utils;
 
-
 import dev.vality.damsel.base.Content;
-import dev.vality.damsel.domain.*;
+import dev.vality.damsel.domain.Invoice;
+import dev.vality.damsel.domain.InvoicePayment;
 import dev.vality.damsel.domain.InvoicePaymentChargeback;
 import dev.vality.damsel.domain.InvoicePaymentChargebackPending;
 import dev.vality.damsel.domain.InvoicePaymentPending;
 import dev.vality.damsel.domain.InvoicePaymentRefund;
 import dev.vality.damsel.domain.InvoicePaymentRefundPending;
+import dev.vality.damsel.domain.*;
 import dev.vality.damsel.payment_processing.*;
 import dev.vality.geck.common.util.TypeUtil;
 import dev.vality.kafka.common.serialization.ThriftSerializer;
@@ -248,7 +249,7 @@ public class MgEventSinkFlowGenerator {
     private static InvoiceCreated createInvoiceCreate(String sourceId) {
 
         return new InvoiceCreated()
-                .setInvoice(new dev.vality.damsel.domain.Invoice()
+                .setInvoice(new Invoice()
                         .setId(sourceId)
                         .setOwnerId(PARTY_ID)
                         .setShopId(SHOP_ID)
@@ -338,7 +339,7 @@ public class MgEventSinkFlowGenerator {
         );
         invoicePaymentChangePayload.setInvoicePaymentStarted(
                 new InvoicePaymentStarted()
-                        .setPayment(new dev.vality.damsel.domain.InvoicePayment()
+                        .setPayment(new InvoicePayment()
                                 .setCost(
                                         new Cash()
                                                 .setAmount(123L)
