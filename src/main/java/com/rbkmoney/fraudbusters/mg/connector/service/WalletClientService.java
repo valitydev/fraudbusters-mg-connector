@@ -1,9 +1,9 @@
 package com.rbkmoney.fraudbusters.mg.connector.service;
 
 
-import com.rbkmoney.fistful.base.EventRange;
-import com.rbkmoney.fistful.wallet.ManagementSrv;
-import com.rbkmoney.fistful.wallet.WalletState;
+import dev.vality.fistful.base.EventRange;
+import dev.vality.fistful.wallet.ManagementSrv;
+import dev.vality.fistful.wallet.WalletState;
 import com.rbkmoney.fraudbusters.mg.connector.exception.PaymentInfoNotFoundException;
 import com.rbkmoney.fraudbusters.mg.connector.exception.PaymentInfoRequestException;
 import lombok.RequiredArgsConstructor;

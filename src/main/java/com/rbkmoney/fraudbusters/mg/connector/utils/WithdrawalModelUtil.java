@@ -2,11 +2,11 @@ package com.rbkmoney.fraudbusters.mg.connector.utils;
 
 import com.rbkmoney.damsel.fraudbusters.Error;
 import com.rbkmoney.damsel.fraudbusters.ProviderInfo;
-import com.rbkmoney.fistful.base.Failure;
-import com.rbkmoney.fistful.destination.DestinationState;
-import com.rbkmoney.fistful.withdrawal.StatusChange;
-import com.rbkmoney.fistful.withdrawal.WithdrawalState;
-import com.rbkmoney.fistful.withdrawal.status.Failed;
+import dev.vality.fistful.base.Failure;
+import dev.vality.fistful.destination.DestinationState;
+import dev.vality.fistful.withdrawal.StatusChange;
+import dev.vality.fistful.withdrawal.WithdrawalState;
+import dev.vality.fistful.withdrawal.status.Failed;
 import com.rbkmoney.geck.serializer.kit.tbase.TBaseProcessor;
 import com.rbkmoney.geck.serializer.kit.tbase.TDomainToStringErrorHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ public class WithdrawalModelUtil {
             error = new Error();
             final Failed failed = statusChange.getStatus().getFailed();
             if (failed.isSetFailure()) {
-                final com.rbkmoney.fistful.base.Failure failure = failed.getFailure();
+                final dev.vality.fistful.base.Failure failure = failed.getFailure();
                 error.setErrorCode(parseError(failure))
                         .setErrorReason(failure.getReason());
 

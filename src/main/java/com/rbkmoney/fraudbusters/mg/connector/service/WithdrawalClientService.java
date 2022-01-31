@@ -1,8 +1,8 @@
 package com.rbkmoney.fraudbusters.mg.connector.service;
 
 
-import com.rbkmoney.fistful.withdrawal.ManagementSrv;
-import com.rbkmoney.fistful.withdrawal.WithdrawalState;
+import dev.vality.fistful.withdrawal.ManagementSrv;
+import dev.vality.fistful.withdrawal.WithdrawalState;
 import com.rbkmoney.fraudbusters.mg.connector.exception.PaymentInfoNotFoundException;
 import com.rbkmoney.fraudbusters.mg.connector.exception.PaymentInfoRequestException;
 import com.rbkmoney.fraudbusters.mg.connector.factory.FistfulEventRangeFactory;

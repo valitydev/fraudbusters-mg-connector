@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class FistfulAccountToDomainAccountConverter
-        implements Converter<com.rbkmoney.fistful.account.Account, Account> {
+        implements Converter<dev.vality.fistful.account.Account, Account> {
 
     private final FistfulCurrencyToDomainCurrencyConverter convertCurrency;
 
     @Override
-    public Account convert(com.rbkmoney.fistful.account.Account fistfulAccount) {
+    public Account convert(dev.vality.fistful.account.Account fistfulAccount) {
         log.debug("Start convert fistfulAccount : {}", fistfulAccount);
         final Account account = new Account();
         account.setCurrency(convertCurrency.convert(fistfulAccount.getCurrency()));

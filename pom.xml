@@ -26,7 +26,7 @@
 
         <machinegun-proto.version>1.18-d814d69</machinegun-proto.version>
         <fraudbusters-proto.version>1.99-2a8f6ca</fraudbusters-proto.version>
-        <fistful-proto.version>1.128-d331fce</fistful-proto.version>
+        <fistful-proto.version>1.133-c484877</fistful-proto.version>
     </properties>
 
     <dependencies>
@@ -79,7 +79,7 @@
             <artifactId>filter</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.rbkmoney</groupId>
+            <groupId>dev.vality</groupId>
             <artifactId>fistful-proto</artifactId>
             <version>${fistful-proto.version}</version>
         </dependency>

@@ -1,13 +1,13 @@
 package com.rbkmoney.fraudbusters.mg.connector.utils;
 
-import com.rbkmoney.fistful.base.Failure;
-import com.rbkmoney.fistful.withdrawal.Change;
-import com.rbkmoney.fistful.withdrawal.StatusChange;
-import com.rbkmoney.fistful.withdrawal.TimestampedChange;
-import com.rbkmoney.fistful.withdrawal.status.Failed;
-import com.rbkmoney.fistful.withdrawal.status.Pending;
-import com.rbkmoney.fistful.withdrawal.status.Status;
-import com.rbkmoney.fistful.withdrawal.status.Succeeded;
+import dev.vality.fistful.base.Failure;
+import dev.vality.fistful.withdrawal.Change;
+import dev.vality.fistful.withdrawal.StatusChange;
+import dev.vality.fistful.withdrawal.TimestampedChange;
+import dev.vality.fistful.withdrawal.status.Failed;
+import dev.vality.fistful.withdrawal.status.Pending;
+import dev.vality.fistful.withdrawal.status.Status;
+import dev.vality.fistful.withdrawal.status.Succeeded;
 import com.rbkmoney.geck.common.util.TypeUtil;
 import com.rbkmoney.kafka.common.serialization.ThriftSerializer;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;

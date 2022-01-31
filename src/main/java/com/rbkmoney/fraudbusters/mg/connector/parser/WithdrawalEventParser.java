@@ -1,6 +1,6 @@
 package com.rbkmoney.fraudbusters.mg.connector.parser;
 
-import com.rbkmoney.fistful.withdrawal.TimestampedChange;
+import dev.vality.fistful.withdrawal.TimestampedChange;
 import com.rbkmoney.fraudbusters.mg.connector.converter.BinaryConverter;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;
 import lombok.RequiredArgsConstructor;

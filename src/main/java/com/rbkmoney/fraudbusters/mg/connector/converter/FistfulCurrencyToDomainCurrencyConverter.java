@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class FistfulCurrencyToDomainCurrencyConverter
-        implements Converter<com.rbkmoney.fistful.base.CurrencyRef, CurrencyRef> {
+        implements Converter<dev.vality.fistful.base.CurrencyRef, CurrencyRef> {
 
     @Override
-    public CurrencyRef convert(com.rbkmoney.fistful.base.CurrencyRef currency) {
+    public CurrencyRef convert(dev.vality.fistful.base.CurrencyRef currency) {
         return new CurrencyRef()
                 .setSymbolicCode(currency.getSymbolicCode());
     }

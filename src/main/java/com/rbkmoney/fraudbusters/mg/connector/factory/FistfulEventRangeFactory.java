@@ -1,7 +1,7 @@
 package com.rbkmoney.fraudbusters.mg.connector.factory;
 
 
-import com.rbkmoney.fistful.base.EventRange;
+import dev.vality.fistful.base.EventRange;
 import org.springframework.stereotype.Service;
 
 @Service

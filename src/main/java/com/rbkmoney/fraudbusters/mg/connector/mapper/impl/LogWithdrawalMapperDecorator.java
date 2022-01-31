@@ -1,7 +1,7 @@
 package com.rbkmoney.fraudbusters.mg.connector.mapper.impl;
 
 import com.rbkmoney.damsel.fraudbusters.Withdrawal;
-import com.rbkmoney.fistful.withdrawal.TimestampedChange;
+import dev.vality.fistful.withdrawal.TimestampedChange;
 import com.rbkmoney.fraudbusters.mg.connector.constant.WithdrawalEventType;
 import com.rbkmoney.fraudbusters.mg.connector.mapper.Mapper;
 import com.rbkmoney.machinegun.eventsink.MachineEvent;

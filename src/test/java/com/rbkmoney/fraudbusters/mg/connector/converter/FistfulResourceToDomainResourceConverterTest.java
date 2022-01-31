@@ -1,9 +1,9 @@
 package com.rbkmoney.fraudbusters.mg.connector.converter;
 
 import com.rbkmoney.damsel.fraudbusters.Resource;
-import com.rbkmoney.fistful.base.ResourceBankCard;
-import com.rbkmoney.fistful.base.ResourceCryptoWallet;
-import com.rbkmoney.fistful.base.ResourceDigitalWallet;
+import dev.vality.fistful.base.ResourceBankCard;
+import dev.vality.fistful.base.ResourceCryptoWallet;
+import dev.vality.fistful.base.ResourceDigitalWallet;
 import com.rbkmoney.fraudbusters.mg.connector.exception.UnknownResourceException;
 import com.rbkmoney.fraudbusters.mg.connector.utils.BuildUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ class FistfulResourceToDomainResourceConverterTest {
     void convertResourceBankCardTest() {
         ResourceBankCard resourceBankCard = new ResourceBankCard();
         resourceBankCard.setBankCard(BuildUtils.buildFistfulBankCard());
-        com.rbkmoney.fistful.base.Resource baseResource = new com.rbkmoney.fistful.base.Resource();
+        dev.vality.fistful.base.Resource baseResource = new dev.vality.fistful.base.Resource();
         baseResource.setBankCard(resourceBankCard);
 
         Resource resource = converter.convert(baseResource);
@@ -38,7 +38,7 @@ class FistfulResourceToDomainResourceConverterTest {
     void convertResourceCryptoWalletTest() {
         ResourceCryptoWallet resourceCryptoWallet = new ResourceCryptoWallet();
         resourceCryptoWallet.setCryptoWallet(BuildUtils.buildFistfulCryptoWallet());
-        com.rbkmoney.fistful.base.Resource baseResource = new com.rbkmoney.fistful.base.Resource();
+        dev.vality.fistful.base.Resource baseResource = new dev.vality.fistful.base.Resource();
         baseResource.setCryptoWallet(resourceCryptoWallet);
 
         Resource resource = converter.convert(baseResource);
@@ -50,7 +50,7 @@ class FistfulResourceToDomainResourceConverterTest {
     void convertResourceDigitalWalletTest() {
         ResourceDigitalWallet resourceDigitalWallet = new ResourceDigitalWallet();
         resourceDigitalWallet.setDigitalWallet(BuildUtils.buildFistfulDigitalWallet());
-        com.rbkmoney.fistful.base.Resource baseResource = new com.rbkmoney.fistful.base.Resource();
+        dev.vality.fistful.base.Resource baseResource = new dev.vality.fistful.base.Resource();
         baseResource.setDigitalWallet(resourceDigitalWallet);
 
         Resource resource = converter.convert(baseResource);
@@ -61,7 +61,7 @@ class FistfulResourceToDomainResourceConverterTest {
     @Test
     void convertUnknownResourceExceptionTest() {
         assertThrows(UnknownResourceException.class, () -> {
-            converter.convert(new com.rbkmoney.fistful.base.Resource());
+            converter.convert(new dev.vality.fistful.base.Resource());
         });
     }
 

@@ -1,13 +1,13 @@
 package com.rbkmoney.fraudbusters.mg.connector.mapper.impl;
 
-import com.rbkmoney.fistful.account.Account;
-import com.rbkmoney.fistful.base.*;
-import com.rbkmoney.fistful.destination.DestinationState;
-import com.rbkmoney.fistful.wallet.WalletState;
-import com.rbkmoney.fistful.withdrawal.Change;
-import com.rbkmoney.fistful.withdrawal.StatusChange;
-import com.rbkmoney.fistful.withdrawal.TimestampedChange;
-import com.rbkmoney.fistful.withdrawal.status.Status;
+import dev.vality.fistful.account.Account;
+import dev.vality.fistful.base.*;
+import dev.vality.fistful.destination.DestinationState;
+import dev.vality.fistful.wallet.WalletState;
+import dev.vality.fistful.withdrawal.Change;
+import dev.vality.fistful.withdrawal.StatusChange;
+import dev.vality.fistful.withdrawal.TimestampedChange;
+import dev.vality.fistful.withdrawal.status.Status;
 import com.rbkmoney.fraudbusters.mg.connector.utils.InvoiceTestConstant;
 
 public class WithdrawalBeanUtils {
