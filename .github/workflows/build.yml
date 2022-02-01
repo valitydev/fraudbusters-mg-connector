@@ -8,10 +8,5 @@ on:
 jobs:
   build:
     uses: valitydev/base-workflow/.github/workflows/maven-service-build.yml@v1
-  deploy:
-    uses: valitydev/base-workflow/.github/workflows/maven-service-deploy.yml@v1
     with:
       ignore-coverage: true
-    secrets:
-      github-token: ${{ secrets.GITHUB_TOKEN }}
-      mm-webhook-url: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
