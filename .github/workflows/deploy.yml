@@ -6,15 +6,9 @@ on:
       - 'master'
       - 'main'
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-
 jobs:
   deploy:
     uses: valitydev/base-workflow/.github/workflows/maven-service-deploy.yml@v1
-    with:
-      ignore-coverage: true
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
       mm-webhook-url: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
