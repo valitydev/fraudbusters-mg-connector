@@ -5,6 +5,8 @@ on:
     branches:
       - '*'
 
+ignore-coverage: true
+
 jobs:
   build:
     uses: valitydev/base-workflow/.github/workflows/maven-service-build.yml@v1
