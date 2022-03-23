@@ -4,9 +4,7 @@ import dev.vality.damsel.domain.BankCard;
 import dev.vality.damsel.domain.CountryCode;
 import dev.vality.damsel.domain.LegacyBankCardPaymentSystem;
 import dev.vality.damsel.domain.PaymentSystemRef;
-import dev.vality.damsel.fraudbusters.CryptoWallet;
-import dev.vality.damsel.fraudbusters.DigitalWallet;
-import dev.vality.damsel.fraudbusters.Resource;
+import dev.vality.damsel.fraudbusters.*;
 import dev.vality.fraudbusters.mg.connector.exception.UnknownResourceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;
@@ -41,6 +39,16 @@ public class FistfulResourceToDomainResourceConverter
                         .getDigitalWallet().getPaymentService().getId());
             }
             resource.setDigitalWallet(digitalWallet);
+        } else if (fistfulResource.isSetGeneric()) {
+            GenericPaymentTool genericPaymentTool = new GenericPaymentTool();
+            genericPaymentTool.setId(fistfulResource.getGeneric().getGeneric().getProvider().getId());
+            if (fistfulResource.getGeneric().getGeneric().isSetData()) {
+                genericPaymentTool.setContent(new Content()
+                        .setData(fistfulResource.getGeneric().getGeneric().getData().getData())
+                        .setType(fistfulResource.getGeneric().getGeneric().getData().getType())
+                );
+            }
+            resource.setGeneric(genericPaymentTool);
         } else {
             log.error("Unknown resource type: {}", fistfulResource);
             throw new UnknownResourceException();
