@@ -42,10 +42,12 @@ public class FistfulResourceToDomainResourceConverter
         } else if (fistfulResource.isSetGeneric()) {
             GenericPaymentTool genericPaymentTool = new GenericPaymentTool();
             genericPaymentTool.setId(fistfulResource.getGeneric().getGeneric().getProvider().getId());
-            genericPaymentTool.setContent(new Content()
-                    .setData(fistfulResource.getGeneric().getGeneric().getData().getData())
-                    .setType(fistfulResource.getGeneric().getGeneric().getData().getType())
-            );
+            if (fistfulResource.getGeneric().getGeneric().isSetData()) {
+                genericPaymentTool.setContent(new Content()
+                        .setData(fistfulResource.getGeneric().getGeneric().getData().getData())
+                        .setType(fistfulResource.getGeneric().getGeneric().getData().getType())
+                );
+            }
             resource.setGeneric(genericPaymentTool);
         } else {
             log.error("Unknown resource type: {}", fistfulResource);
