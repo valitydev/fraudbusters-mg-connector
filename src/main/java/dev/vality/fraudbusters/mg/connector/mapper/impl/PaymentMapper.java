@@ -13,7 +13,6 @@ import dev.vality.fraudbusters.mg.connector.mapper.initializer.InfoInitializer;
 import dev.vality.fraudbusters.mg.connector.service.HgClientService;
 import dev.vality.geck.common.util.TBaseUtil;
 import dev.vality.machinegun.eventsink.MachineEvent;
-import dev.vality.mamsel.TokenProviderUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -108,7 +107,7 @@ public class PaymentMapper implements Mapper<InvoiceChange, MachineEvent, Paymen
     }
 
     public boolean isMobile(PaymentTool paymentTool) {
-        return paymentTool.isSetBankCard() && TokenProviderUtil.getTokenProviderName(paymentTool.getBankCard()) != null;
+        return paymentTool.isSetBankCard() && paymentTool.getBankCard().getPaymentToken() != null;
     }
 
 }
