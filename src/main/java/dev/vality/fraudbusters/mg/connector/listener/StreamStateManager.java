@@ -26,7 +26,7 @@ public class StreamStateManager {
     private final ShutdownManager shutdownManager;
     private final List<EventSinkFactory> eventSinkFactories;
 
-    @Scheduled(fixedDelayString = "${kafka.stream.fixed-rate-timeout-ms}")
+    @Scheduled(fixedDelayString = "${spring.kafka.streams.properties.fixed.rate.timeout.ms}")
     public void monitorStateOfStreams() {
         if (isStreamRunning.get()) {
             try {
