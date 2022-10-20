@@ -72,7 +72,7 @@ public class IntegrationTest extends KafkaAbstractTest {
 
     @Test
     public void contextLoads() throws TException, IOException, InterruptedException {
-        Mockito.when(invoicingClient.get(any(), any(), any()))
+        Mockito.when(invoicingClient.get(any(), any()))
                 .thenThrow(new RuntimeException())
                 .thenReturn(BuildUtils.buildInvoice(MgEventSinkFlowGenerator.PARTY_ID, MgEventSinkFlowGenerator.SHOP_ID,
                         "sourceId", "1", "1", "1",
