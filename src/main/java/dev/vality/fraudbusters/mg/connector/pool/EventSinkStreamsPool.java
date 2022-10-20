@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class EventSinkStreamsPool {
 
-    @Value("${kafka.stream.clean-timeout-sec}")
+    @Value("${spring.kafka.streams.clean.timeout.sec}")
     private Long cleanTimeoutSec;
 
     private final Map<StreamType, KafkaStreams> kafkaStreamsList = new ConcurrentHashMap<>();
