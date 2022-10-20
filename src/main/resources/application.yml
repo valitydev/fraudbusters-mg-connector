@@ -31,6 +31,24 @@ spring:
   output:
     ansi:
       enabled: always
+  kafka:
+    bootstrap-servers: "localhost:29092"
+    client-id: fraud-connector-client
+    streams:
+      application-id: fraud-connector
+      properties:
+        retries: 300
+        retry.backoff.ms: 1000
+        num.stream.threads: 7
+        default.api.timeout.ms: 300000
+        clean.timeout.sec: 20
+        fixed.rate.timeout.ms: 60000
+    consumer:
+      properties:
+        max.poll.interval.ms: 60000
+        session.timeout.ms: 60000
+        throttling.timeout.ms: 1000
+
 info:
   version: '@project.version@'
   stage: dev
@@ -50,21 +68,6 @@ service:
     networkTimeout: 5000
 
 kafka:
-  bootstrap.servers: "localhost:29092"
-  num-stream-threads: 7
-  stream:
-    retries-attempts: 300
-    retries-backoff-ms: 1000
-    default-api-timeout-ms: 300000
-    clean-timeout-sec: 20
-    fixed-rate-timeout-ms: 60000
-  ssl:
-    enable: false
-    keystore-location: src/main/resources/cert/kenny-k.struzhkin.p12
-    keystore-password: kenny
-    key-password: kenny
-    server-password: kenny12
-    server-keystore-location: src/main/resources/cert/truststore.p12
   topic:
     source:
       invoicing: mg-event

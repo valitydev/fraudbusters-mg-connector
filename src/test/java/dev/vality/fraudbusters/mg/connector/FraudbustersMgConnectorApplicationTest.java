@@ -44,9 +44,9 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(classes = FraudbustersMgConnectorApplication.class,
         properties = {
                 "stream.withdrawal.debug=false",
-                "kafka.stream.retries-attempts=1",
-                "kafka.stream.retries-backoff-ms=100",
-                "kafka.stream.fixed-rate-timeout-ms=100"
+                "spring.kafka.streams.retries=1",
+                "spring.kafka.streams.retriy.backoff.ms=100",
+                "spring.kafka.streams.fixed.rate.timeout.ms=100"
         })
 public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
 
