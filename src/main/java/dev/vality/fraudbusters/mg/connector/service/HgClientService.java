@@ -19,9 +19,6 @@ import java.util.function.BiFunction;
 @RequiredArgsConstructor
 public class HgClientService {
 
-    public static final String ANALYTICS = "analytics";
-    public static final UserInfo USER_INFO = new UserInfo(ANALYTICS, UserType.service_user(new ServiceUser()));
-
     private final InvoicingSrv.Iface invoicingClient;
     private final EventRangeFactory eventRangeFactory;
 
@@ -49,7 +46,7 @@ public class HgClientService {
             long sequenceId) {
         InvoicePaymentWrapper invoicePaymentWrapper = new InvoicePaymentWrapper();
         try {
-            Invoice invoiceInfo = invoicingClient.get(USER_INFO, invoiceId, eventRangeFactory.create(sequenceId));
+            Invoice invoiceInfo = invoicingClient.get(invoiceId, eventRangeFactory.create(sequenceId));
             if (invoiceInfo == null) {
                 throw new PaymentInfoNotFoundException("Not found invoice info in hg!");
             }

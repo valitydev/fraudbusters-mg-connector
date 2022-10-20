@@ -2,9 +2,9 @@ package dev.vality.fraudbusters.mg.connector.converter;
 
 import dev.vality.damsel.domain.BankCard;
 import dev.vality.damsel.domain.CountryCode;
-import dev.vality.damsel.domain.LegacyBankCardPaymentSystem;
 import dev.vality.damsel.domain.PaymentSystemRef;
 import dev.vality.damsel.fraudbusters.*;
+import dev.vality.fraudbusters.mg.connector.constant.PaymentSystemType;
 import dev.vality.fraudbusters.mg.connector.exception.UnknownResourceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;
@@ -16,7 +16,7 @@ public class FistfulResourceToDomainResourceConverter
         implements Converter<dev.vality.fistful.base.Resource, Resource> {
 
     public static final PaymentSystemRef DEFAULT_PAYMENT_SYSTEM =
-            new PaymentSystemRef(LegacyBankCardPaymentSystem.visa.name());
+            new PaymentSystemRef(PaymentSystemType.visa.name());
     public static final String UNKNOWN = "UNKNOWN";
 
     @Override

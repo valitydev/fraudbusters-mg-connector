@@ -44,9 +44,9 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(classes = FraudbustersMgConnectorApplication.class,
         properties = {
                 "stream.withdrawal.debug=false",
-                "kafka.stream.retries-attempts=1",
-                "kafka.stream.retries-backoff-ms=100",
-                "kafka.stream.fixed-rate-timeout-ms=100"
+                "spring.kafka.streams.properties.retries=1",
+                "spring.kafka.streams.properties.retry.backoff.ms=100",
+                "spring.kafka.streams.properties.fixed.rate.timeout.ms=100"
         })
 public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
 
@@ -131,7 +131,7 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
     }
 
     private OngoingStubbing<Invoice> mockPayment(String sourceId, int i) throws TException, IOException {
-        return when(invoicingClient.get(HgClientService.USER_INFO, sourceId, eventRangeFactory.create(i)))
+        return when(invoicingClient.get(sourceId, eventRangeFactory.create(i)))
                 .thenReturn(BuildUtils.buildInvoice(MgEventSinkFlowGenerator.PARTY_ID, MgEventSinkFlowGenerator.SHOP_ID,
                         sourceId, "1", "1", "1",
                         InvoiceStatus.paid(new InvoicePaid()),
@@ -139,7 +139,7 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
     }
 
     private void mockPaymentWithException(String sourceId) throws TException, IOException {
-        when(invoicingClient.get(HgClientService.USER_INFO, sourceId, eventRangeFactory.create(6)))
+        when(invoicingClient.get(sourceId, eventRangeFactory.create(6)))
                 .thenThrow(new RuntimeException())
                 .thenReturn(BuildUtils.buildInvoice(MgEventSinkFlowGenerator.PARTY_ID, MgEventSinkFlowGenerator.SHOP_ID,
                         sourceId, "1", "1", "1",
@@ -149,7 +149,7 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
     }
 
     private void mockRefund(String sourceId, int sequenceId, String refundId) throws TException, IOException {
-        when(invoicingClient.get(HgClientService.USER_INFO, sourceId, eventRangeFactory.create(sequenceId)))
+        when(invoicingClient.get(sourceId, eventRangeFactory.create(sequenceId)))
                 .thenReturn(BuildUtils.buildInvoice(MgEventSinkFlowGenerator.PARTY_ID, MgEventSinkFlowGenerator.SHOP_ID,
                         sourceId, "1", refundId, "1",
                         InvoiceStatus.paid(new InvoicePaid()),
@@ -157,7 +157,7 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
     }
 
     private void mockChargeback(String sourceId, int sequenceId, String chargebackId) throws TException, IOException {
-        when(invoicingClient.get(HgClientService.USER_INFO, sourceId, eventRangeFactory.create(sequenceId)))
+        when(invoicingClient.get(sourceId, eventRangeFactory.create(sequenceId)))
                 .thenReturn(BuildUtils.buildInvoice(MgEventSinkFlowGenerator.PARTY_ID, MgEventSinkFlowGenerator.SHOP_ID,
                         sourceId, "1", "1", chargebackId,
                         InvoiceStatus.paid(new InvoicePaid()),

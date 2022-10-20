@@ -88,7 +88,7 @@ public abstract class KafkaAbstractTest {
         @Override
         public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
             TestPropertyValues
-                    .of("kafka.bootstrap.servers=" + KafkaExtension.KAFKA.getBootstrapServers())
+                    .of("spring.kafka.bootstrap-servers=" + KafkaExtension.KAFKA.getBootstrapServers())
                     .applyTo(configurableApplicationContext.getEnvironment());
             initTopic(MG_EVENT);
             initTopic(PAYMENT);

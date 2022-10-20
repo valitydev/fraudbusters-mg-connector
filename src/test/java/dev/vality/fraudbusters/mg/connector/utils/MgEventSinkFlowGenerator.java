@@ -10,6 +10,7 @@ import dev.vality.damsel.domain.InvoicePaymentRefund;
 import dev.vality.damsel.domain.InvoicePaymentRefundPending;
 import dev.vality.damsel.domain.*;
 import dev.vality.damsel.payment_processing.*;
+import dev.vality.fraudbusters.mg.connector.constant.PaymentSystemType;
 import dev.vality.geck.common.util.TypeUtil;
 import dev.vality.kafka.common.serialization.ThriftSerializer;
 import dev.vality.machinegun.eventsink.MachineEvent;
@@ -405,7 +406,7 @@ public class MgEventSinkFlowGenerator {
         paymentTool.setBankCard(
                 new BankCard()
                         .setToken("477bba133c182267fe5f086924abdc5db71f77bfc27f01f2843f2cdc69d89f05")
-                        .setPaymentSystem(new PaymentSystemRef(LegacyBankCardPaymentSystem.mastercard.name()))
+                        .setPaymentSystem(new PaymentSystemRef(PaymentSystemType.mastercard.name()))
                         .setBin(BIN)
                         .setLastDigits("4242")
                         .setIssuerCountry(CountryCode.RUS)

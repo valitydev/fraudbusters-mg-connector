@@ -1,7 +1,6 @@
 package dev.vality.fraudbusters.mg.connector.utils;
 
 import dev.vality.fistful.base.CardType;
-import dev.vality.fistful.base.LegacyBankCardPaymentSystem;
 import dev.vality.fistful.base.Residence;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -9,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class InvoiceTestConstant {
 
-    public static final LegacyBankCardPaymentSystem CARD_PAYMENT_SYSTEM = LegacyBankCardPaymentSystem.mastercard;
     public static final String CARD_PAYMENT_SYSTEM_REF = "1";
     public static final String CARD_BIN = "bin";
     public static final String CARDHOLDER_NAME = "CARD HOLDER";
