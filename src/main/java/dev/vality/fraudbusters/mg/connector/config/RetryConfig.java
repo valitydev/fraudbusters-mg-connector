@@ -10,10 +10,10 @@ import org.springframework.retry.support.RetryTemplate;
 @Configuration
 public class RetryConfig {
 
-    @Value("${spring.kafka.streams.retries}")
+    @Value("${spring.kafka.streams.properties.retries}")
     private int retriesAttempts;
 
-    @Value("${spring.kafka.streams.retry.backoff.ms}")
+    @Value("${spring.kafka.streams.properties.retry.backoff.ms}")
     private int retriesBackoffMs;
 
     @Bean

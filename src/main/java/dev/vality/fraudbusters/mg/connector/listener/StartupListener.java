@@ -22,7 +22,7 @@ public class StartupListener implements ApplicationListener<ContextRefreshedEven
     private final List<EventSinkFactory> eventSinkFactories;
     private final EventSinkStreamsPool eventSinkStreamsPool;
 
-    @Value("${spring.kafka.streams.clean.timeout.sec}")
+    @Value("${spring.kafka.streams.properties.clean.timeout.sec}")
     private Long cleanTimeoutSec;
 
     @Override
