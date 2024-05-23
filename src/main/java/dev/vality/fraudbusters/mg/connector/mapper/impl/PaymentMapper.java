@@ -36,6 +36,8 @@ public class PaymentMapper implements Mapper<InvoiceChange, MachineEvent, Paymen
                 || change.getInvoicePaymentChange().getPayload().getInvoicePaymentStatusChanged().getStatus()
                 .isSetProcessed()
                 || change.getInvoicePaymentChange().getPayload().getInvoicePaymentStatusChanged().getStatus()
+                .isSetPending()
+                || change.getInvoicePaymentChange().getPayload().getInvoicePaymentStatusChanged().getStatus()
                 .isSetCaptured());
     }
 
