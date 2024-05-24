@@ -46,6 +46,7 @@ public class HgClientService {
             long sequenceId) {
         InvoicePaymentWrapper invoicePaymentWrapper = new InvoicePaymentWrapper();
         try {
+            log.info("invoiceId: {} sequenceId: {}", invoiceId, sequenceId);
             Invoice invoiceInfo = invoicingClient.get(invoiceId, eventRangeFactory.create(sequenceId));
             if (invoiceInfo == null) {
                 throw new PaymentInfoNotFoundException("Not found invoice info in hg!");
