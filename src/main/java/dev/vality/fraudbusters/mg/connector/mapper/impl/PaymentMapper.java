@@ -1,5 +1,6 @@
 package dev.vality.fraudbusters.mg.connector.mapper.impl;
 
+import dev.vality.damsel.domain.InvoicePaymentStatus;
 import dev.vality.damsel.domain.Payer;
 import dev.vality.damsel.domain.PaymentTool;
 import dev.vality.damsel.fraudbusters.PayerType;
@@ -45,73 +46,37 @@ public class PaymentMapper implements Mapper<InvoiceChange, MachineEvent, Paymen
     @Override
     public Payment map(InvoiceChange change, MachineEvent event) {
         Payment payment = null;
+        String paymentId = change.getInvoicePaymentChange().getId();
+        InvoicePaymentChange invoicePaymentChange = change.getInvoicePaymentChange();
+        InvoicePaymentChangePayload payload = invoicePaymentChange.getPayload();
+        InvoicePaymentWrapper invoicePaymentWrapper = invokeHgGetInvoiceInfo(change, event, paymentId);
+        var invoice = invoicePaymentWrapper.getInvoice();
+        var invoicePayment = invoicePaymentWrapper.getInvoicePayment();
+        Payer payer = invoicePayment.getPayment().getPayer();
+        PaymentTool paymentTool = generalInfoInitiator.initPaymentTool(payer);
         if (InvoiceEventType.INVOICE_PAYMENT_STARTED.getFilter().match(change)) {
-            String paymentId = change.getInvoicePaymentChange().getId();
-            InvoicePaymentChange invoicePaymentChange = change.getInvoicePaymentChange();
-            InvoicePaymentChangePayload payload = invoicePaymentChange.getPayload();
             InvoicePaymentStarted invoicePaymentStarted = payload.getInvoicePaymentStarted();
-
-            InvoicePaymentWrapper invoicePaymentWrapper = invokeHgGetInvoiceInfo(change, event, paymentId);
-
-            var invoice = invoicePaymentWrapper.getInvoice();
-            var invoicePayment = invoicePaymentWrapper.getInvoicePayment();
-
-            Payer payer = invoicePayment.getPayment().getPayer();
-            PaymentTool paymentTool = generalInfoInitiator.initPaymentTool(payer);
-            payment = initPaymentByStartedEvent(event, invoicePaymentStarted, invoice, invoicePayment, payer,
-                    paymentTool);
+            payment = initPaymentByChangeStatusEvent(event, invoicePaymentStarted.getPayment().getStatus(), invoice,
+                    invoicePayment, payer, paymentTool);
         } else {
-            String paymentId = change.getInvoicePaymentChange().getId();
-            InvoicePaymentChange invoicePaymentChange = change.getInvoicePaymentChange();
-            InvoicePaymentChangePayload payload = invoicePaymentChange.getPayload();
             InvoicePaymentStatusChanged invoicePaymentStatusChanged = payload.getInvoicePaymentStatusChanged();
-
-            InvoicePaymentWrapper invoicePaymentWrapper = invokeHgGetInvoiceInfo(change, event, paymentId);
-
-            var invoice = invoicePaymentWrapper.getInvoice();
-            var invoicePayment = invoicePaymentWrapper.getInvoicePayment();
-
-            Payer payer = invoicePayment.getPayment().getPayer();
-            PaymentTool paymentTool = generalInfoInitiator.initPaymentTool(payer);
-            payment = initPaymentByChangeStatusEvent(event, invoicePaymentStatusChanged, invoice, invoicePayment, payer,
-                    paymentTool);
+            payment = initPaymentByChangeStatusEvent(event, invoicePaymentStatusChanged.getStatus(), invoice,
+                    invoicePayment, payer, paymentTool)
+                    .setError(generalInfoInitiator.initError(invoicePaymentStatusChanged));
         }
         log.debug("Map payment: {}", payment);
         return payment;
     }
 
     private Payment initPaymentByChangeStatusEvent(MachineEvent event,
-                                                   InvoicePaymentStatusChanged invoicePaymentStatusChanged,
+                                                   InvoicePaymentStatus status,
                                                    dev.vality.damsel.domain.Invoice invoice,
                                                    InvoicePayment invoicePayment,
                                                    Payer payer,
                                                    PaymentTool paymentTool) {
         var payment = invoicePayment.getPayment();
         return new Payment()
-                .setStatus(TBaseUtil.unionFieldToEnum(invoicePaymentStatusChanged.getStatus(), PaymentStatus.class))
-                .setCost(payment.getCost())
-                .setReferenceInfo(generalInfoInitiator.initReferenceInfo(invoice))
-                .setPaymentTool(paymentTool)
-                .setId(String.join(DELIMITER, invoice.getId(), payment.getId()))
-                .setEventTime(event.getCreatedAt())
-                .setClientInfo(generalInfoInitiator.initClientInfo(payer))
-                .setProviderInfo(generalInfoInitiator.initProviderInfo(invoicePayment))
-                .setPayerType(TBaseUtil.unionFieldToEnum(payer, PayerType.class))
-                .setMobile(isMobile(paymentTool))
-                .setRecurrent(isRecurrent(payer))
-                .setError(generalInfoInitiator.initError(invoicePaymentStatusChanged));
-    }
-
-    private Payment initPaymentByStartedEvent(MachineEvent event,
-                                              InvoicePaymentStarted invoicePaymentStatusChanged,
-                                              dev.vality.damsel.domain.Invoice invoice,
-                                              InvoicePayment invoicePayment,
-                                              Payer payer,
-                                              PaymentTool paymentTool) {
-        var payment = invoicePayment.getPayment();
-        return new Payment()
-                .setStatus(TBaseUtil.unionFieldToEnum(invoicePaymentStatusChanged.getPayment().getStatus(),
-                        PaymentStatus.class))
+                .setStatus(TBaseUtil.unionFieldToEnum(status, PaymentStatus.class))
                 .setCost(payment.getCost())
                 .setReferenceInfo(generalInfoInitiator.initReferenceInfo(invoice))
                 .setPaymentTool(paymentTool)
