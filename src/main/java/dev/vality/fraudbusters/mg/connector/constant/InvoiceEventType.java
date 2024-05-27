@@ -12,6 +12,10 @@ public enum InvoiceEventType implements EventType {
     INVOICE_PAYMENT_STATUS_CHANGED(
             "invoice_payment_change.payload.invoice_payment_status_changed",
             new IsNullCondition().not()),
+
+    INVOICE_PAYMENT_STARTED(
+            "invoice_payment_change.payload.invoice_payment_started",
+            new IsNullCondition().not()),
     INVOICE_PAYMENT_REFUND_STATUS_CHANGED(
             "invoice_payment_change.payload.invoice_payment_refund_change.payload.invoice_payment_refund_status_changed",
             new IsNullCondition().not()),
