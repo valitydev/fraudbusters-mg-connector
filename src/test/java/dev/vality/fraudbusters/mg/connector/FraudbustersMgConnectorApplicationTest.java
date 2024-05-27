@@ -74,8 +74,12 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
 
         String sourceIdRefund2 = "sourceIdRefund2";
         mockPayment(sourceIdRefund2);
-        mockRefund(sourceIdRefund2, 7, "1");
+        mockRefund(sourceIdRefund2, 8, "2");
+        mockRefund(sourceIdRefund2, 7, "2");
         mockRefund(sourceIdRefund2, 9, "2");
+        mockRefund(sourceIdRefund2, 2, "2");
+        mockRefund(sourceIdRefund2, 3, "2");
+        mockRefund(sourceIdRefund2, 7, "1");
         sinkEvents = MgEventSinkFlowGenerator.generateRefundedFlow(sourceIdRefund2);
         sinkEvents.forEach(sinkEvent -> produceMessageToEventSink(MG_EVENT, sinkEvent));
 
@@ -84,6 +88,8 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
         String sourceChargeback = "source_chargeback";
         sinkEvents = MgEventSinkFlowGenerator.generateChargebackFlow(sourceChargeback);
         mockPayment(sourceChargeback);
+        mockChargeback(sourceChargeback, 2, "1");
+        mockChargeback(sourceChargeback, 3, "1");
         mockChargeback(sourceChargeback, 6, "1");
         sinkEvents.forEach(sinkEvent -> produceMessageToEventSink(MG_EVENT, sinkEvent));
 
@@ -93,7 +99,7 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
         sinkEvents = MgEventSinkFlowGenerator.generateSuccessFlow(SOURCE_ID);
         mockPaymentWithException(SOURCE_ID);
         sinkEvents.forEach(sinkEvent -> produceMessageToEventSink(MG_EVENT, sinkEvent));
-        checkMessageInTopic(PAYMENT, PaymentDeserializer.class, 6);
+        checkMessageInTopic(PAYMENT, PaymentDeserializer.class, 10);
     }
 
     @Test
