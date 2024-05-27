@@ -30,43 +30,62 @@ public class PaymentMapper implements Mapper<InvoiceChange, MachineEvent, Paymen
 
     @Override
     public boolean accept(InvoiceChange change) {
-        return getChangeType().getFilter().match(change)
+        return InvoiceEventType.INVOICE_PAYMENT_STATUS_CHANGED.getFilter().match(change)
                 && (change.getInvoicePaymentChange().getPayload().getInvoicePaymentStatusChanged().getStatus()
                 .isSetFailed()
                 || change.getInvoicePaymentChange().getPayload().getInvoicePaymentStatusChanged().getStatus()
                 .isSetProcessed()
                 || change.getInvoicePaymentChange().getPayload().getInvoicePaymentStatusChanged().getStatus()
-                .isSetPending()
-                || change.getInvoicePaymentChange().getPayload().getInvoicePaymentStatusChanged().getStatus()
-                .isSetCaptured());
+                .isSetCaptured())
+                || InvoiceEventType.INVOICE_PAYMENT_STARTED.getFilter().match(change)
+                && change.getInvoicePaymentChange().getPayload().getInvoicePaymentStarted().getPayment().getStatus()
+                .isSetPending();
     }
 
     @Override
     public Payment map(InvoiceChange change, MachineEvent event) {
-        String paymentId = change.getInvoicePaymentChange().getId();
-        InvoicePaymentChange invoicePaymentChange = change.getInvoicePaymentChange();
-        InvoicePaymentChangePayload payload = invoicePaymentChange.getPayload();
-        InvoicePaymentStatusChanged invoicePaymentStatusChanged = payload.getInvoicePaymentStatusChanged();
+        Payment payment = null;
+        if (InvoiceEventType.INVOICE_PAYMENT_STARTED.getFilter().match(change)) {
+            String paymentId = change.getInvoicePaymentChange().getId();
+            InvoicePaymentChange invoicePaymentChange = change.getInvoicePaymentChange();
+            InvoicePaymentChangePayload payload = invoicePaymentChange.getPayload();
+            InvoicePaymentStarted invoicePaymentStarted = payload.getInvoicePaymentStarted();
 
-        InvoicePaymentWrapper invoicePaymentWrapper = invokeHgGetInvoiceInfo(change, event, paymentId);
+            InvoicePaymentWrapper invoicePaymentWrapper = invokeHgGetInvoiceInfo(change, event, paymentId);
 
-        var invoice = invoicePaymentWrapper.getInvoice();
-        var invoicePayment = invoicePaymentWrapper.getInvoicePayment();
+            var invoice = invoicePaymentWrapper.getInvoice();
+            var invoicePayment = invoicePaymentWrapper.getInvoicePayment();
 
-        Payer payer = invoicePayment.getPayment().getPayer();
-        PaymentTool paymentTool = generalInfoInitiator.initPaymentTool(payer);
-        Payment payment = initPayment(event, invoicePaymentStatusChanged, invoice, invoicePayment, payer, paymentTool);
+            Payer payer = invoicePayment.getPayment().getPayer();
+            PaymentTool paymentTool = generalInfoInitiator.initPaymentTool(payer);
+            payment = initPaymentByStartedEvent(event, invoicePaymentStarted, invoice, invoicePayment, payer,
+                    paymentTool);
+        } else {
+            String paymentId = change.getInvoicePaymentChange().getId();
+            InvoicePaymentChange invoicePaymentChange = change.getInvoicePaymentChange();
+            InvoicePaymentChangePayload payload = invoicePaymentChange.getPayload();
+            InvoicePaymentStatusChanged invoicePaymentStatusChanged = payload.getInvoicePaymentStatusChanged();
 
+            InvoicePaymentWrapper invoicePaymentWrapper = invokeHgGetInvoiceInfo(change, event, paymentId);
+
+            var invoice = invoicePaymentWrapper.getInvoice();
+            var invoicePayment = invoicePaymentWrapper.getInvoicePayment();
+
+            Payer payer = invoicePayment.getPayment().getPayer();
+            PaymentTool paymentTool = generalInfoInitiator.initPaymentTool(payer);
+            payment = initPaymentByChangeStatusEvent(event, invoicePaymentStatusChanged, invoice, invoicePayment, payer,
+                    paymentTool);
+        }
         log.debug("Map payment: {}", payment);
         return payment;
     }
 
-    private Payment initPayment(MachineEvent event,
-                                InvoicePaymentStatusChanged invoicePaymentStatusChanged,
-                                dev.vality.damsel.domain.Invoice invoice,
-                                InvoicePayment invoicePayment,
-                                Payer payer,
-                                PaymentTool paymentTool) {
+    private Payment initPaymentByChangeStatusEvent(MachineEvent event,
+                                                   InvoicePaymentStatusChanged invoicePaymentStatusChanged,
+                                                   dev.vality.damsel.domain.Invoice invoice,
+                                                   InvoicePayment invoicePayment,
+                                                   Payer payer,
+                                                   PaymentTool paymentTool) {
         var payment = invoicePayment.getPayment();
         return new Payment()
                 .setStatus(TBaseUtil.unionFieldToEnum(invoicePaymentStatusChanged.getStatus(), PaymentStatus.class))
@@ -81,6 +100,28 @@ public class PaymentMapper implements Mapper<InvoiceChange, MachineEvent, Paymen
                 .setMobile(isMobile(paymentTool))
                 .setRecurrent(isRecurrent(payer))
                 .setError(generalInfoInitiator.initError(invoicePaymentStatusChanged));
+    }
+
+    private Payment initPaymentByStartedEvent(MachineEvent event,
+                                              InvoicePaymentStarted invoicePaymentStatusChanged,
+                                              dev.vality.damsel.domain.Invoice invoice,
+                                              InvoicePayment invoicePayment,
+                                              Payer payer,
+                                              PaymentTool paymentTool) {
+        var payment = invoicePayment.getPayment();
+        return new Payment()
+                .setStatus(TBaseUtil.unionFieldToEnum(invoicePaymentStatusChanged.getPayment().getStatus(),
+                        PaymentStatus.class))
+                .setCost(payment.getCost())
+                .setReferenceInfo(generalInfoInitiator.initReferenceInfo(invoice))
+                .setPaymentTool(paymentTool)
+                .setId(String.join(DELIMITER, invoice.getId(), payment.getId()))
+                .setEventTime(event.getCreatedAt())
+                .setClientInfo(generalInfoInitiator.initClientInfo(payer))
+                .setProviderInfo(generalInfoInitiator.initProviderInfo(invoicePayment))
+                .setPayerType(TBaseUtil.unionFieldToEnum(payer, PayerType.class))
+                .setMobile(isMobile(paymentTool))
+                .setRecurrent(isRecurrent(payer));
     }
 
     @Override
