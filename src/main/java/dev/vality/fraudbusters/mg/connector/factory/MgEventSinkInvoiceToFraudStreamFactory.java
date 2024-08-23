@@ -2,6 +2,7 @@ package dev.vality.fraudbusters.mg.connector.factory;
 
 import dev.vality.damsel.payment_processing.EventPayload;
 import dev.vality.damsel.payment_processing.InvoiceChange;
+import dev.vality.fraudbusters.mg.connector.config.properties.StreamProperties;
 import dev.vality.fraudbusters.mg.connector.constant.StreamType;
 import dev.vality.fraudbusters.mg.connector.domain.MgEventWrapper;
 import dev.vality.fraudbusters.mg.connector.exception.StreamInitializationException;
@@ -42,6 +43,7 @@ public class MgEventSinkInvoiceToFraudStreamFactory implements EventSinkFactory 
     private final RefundPaymentMapper refundPaymentMapper;
     private final EventParser<EventPayload> paymentEventParser;
     private final RetryTemplate retryTemplate;
+    private final StreamProperties streamProperties;
     private final PaymentSerde paymentSerde = new PaymentSerde();
     private final RefundSerde refundSerde = new RefundSerde();
     private final ChargebackSerde chargebackSerde = new ChargebackSerde();
@@ -101,6 +103,11 @@ public class MgEventSinkInvoiceToFraudStreamFactory implements EventSinkFactory 
             log.error("WbListStreamFactory error when create stream e: ", e);
             throw new StreamInitializationException(e);
         }
+    }
+
+    @Override
+    public Boolean isEnabled() {
+        return streamProperties.isInvoiceEnabled();
     }
 
     private MgEventWrapper wrapMgEvent(Map.Entry<MachineEvent, EventPayload> entry, InvoiceChange invoiceChange) {

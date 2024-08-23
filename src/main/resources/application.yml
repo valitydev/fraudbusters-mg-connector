@@ -75,4 +75,6 @@ kafka:
 
 stream:
   withdrawal:
-    debug: false
+    enabled: true
+  invoice:
+    enabled: true
