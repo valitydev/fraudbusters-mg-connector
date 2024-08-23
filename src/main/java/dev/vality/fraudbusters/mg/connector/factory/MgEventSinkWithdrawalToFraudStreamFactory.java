@@ -18,6 +18,7 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.Produced;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,11 @@ import java.util.Properties;
 
 @Slf4j
 @Component
+@ConditionalOnProperty(
+        value = "fb.stream.withdrawalEnabled",
+        havingValue = "true",
+        matchIfMissing = true
+)
 @RequiredArgsConstructor
 public class MgEventSinkWithdrawalToFraudStreamFactory implements EventSinkFactory {
 

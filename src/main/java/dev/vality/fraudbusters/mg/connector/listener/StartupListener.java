@@ -35,9 +35,9 @@ public class StartupListener implements ApplicationListener<ContextRefreshedEven
     private void initKafkaStream(EventSinkFactory eventSinkFactory) {
         KafkaStreams kafkaStreams = eventSinkFactory.create();
         kafkaStreams.start();
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> kafkaStreams.close(Duration.ofSeconds(cleanTimeoutSec))));
+        Runtime.getRuntime()
+                .addShutdownHook(new Thread(() -> kafkaStreams.close(Duration.ofSeconds(cleanTimeoutSec))));
         eventSinkStreamsPool.put(eventSinkFactory.getType(), kafkaStreams);
         log.info("StartupListener start stream kafkaStreams: {}", kafkaStreams.allMetadata());
     }
-
 }

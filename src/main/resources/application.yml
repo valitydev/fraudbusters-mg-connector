@@ -73,6 +73,6 @@ kafka:
       chargeback: chargeback
       withdrawal: withdrawal
 
-stream:
-  withdrawal:
-    debug: false
+fb.stream:
+  withdrawalEnabled: true
+  invoiceEnabled: true

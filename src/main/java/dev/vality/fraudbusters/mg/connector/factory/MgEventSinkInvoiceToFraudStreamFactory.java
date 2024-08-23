@@ -24,6 +24,7 @@ import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Produced;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +34,11 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
+@ConditionalOnProperty(
+        value = "fb.stream.invoiceEnabled",
+        havingValue = "true",
+        matchIfMissing = true
+)
 @RequiredArgsConstructor
 public class MgEventSinkInvoiceToFraudStreamFactory implements EventSinkFactory {
 
@@ -82,18 +88,18 @@ public class MgEventSinkInvoiceToFraudStreamFactory implements EventSinkFactory 
                             );
 
             branch[0].mapValues(mgEventWrapper ->
-                    retryTemplate.execute(args ->
-                            paymentMapper.map(mgEventWrapper.getChange(), mgEventWrapper.getEvent())))
+                            retryTemplate.execute(args ->
+                                    paymentMapper.map(mgEventWrapper.getChange(), mgEventWrapper.getEvent())))
                     .to(paymentTopic, Produced.with(Serdes.String(), paymentSerde));
 
             branch[1].mapValues(mgEventWrapper ->
-                    retryTemplate.execute(args ->
-                            chargebackPaymentMapper.map(mgEventWrapper.getChange(), mgEventWrapper.getEvent())))
+                            retryTemplate.execute(args ->
+                                    chargebackPaymentMapper.map(mgEventWrapper.getChange(), mgEventWrapper.getEvent())))
                     .to(chargebackTopic, Produced.with(Serdes.String(), chargebackSerde));
 
             branch[2].mapValues(mgEventWrapper ->
-                    retryTemplate.execute(args ->
-                            refundPaymentMapper.map(mgEventWrapper.getChange(), mgEventWrapper.getEvent())))
+                            retryTemplate.execute(args ->
+                                    refundPaymentMapper.map(mgEventWrapper.getChange(), mgEventWrapper.getEvent())))
                     .to(refundTopic, Produced.with(Serdes.String(), refundSerde));
 
             return new KafkaStreams(builder.build(), mgInvoiceEventStreamProperties);
