@@ -43,14 +43,14 @@ public class StreamStateManager {
     }
 
     private void createStreamIfShutdown(EventSinkFactory eventSinkFactory) {
-            StreamType streamType = eventSinkFactory.getType();
-            KafkaStreams kafkaStreams = eventSinkStreamsPool.get(streamType);
-            if (kafkaStreams != null && (kafkaStreams.state() == KafkaStreams.State.NOT_RUNNING)) {
-                KafkaStreams kafkaStreamsNew = eventSinkFactory.create();
-                kafkaStreamsNew.start();
-                eventSinkStreamsPool.put(streamType, kafkaStreamsNew);
-                log.info("Kafka stream streamType: {} state: {}", streamType, kafkaStreams.state());
-            }
+        StreamType streamType = eventSinkFactory.getType();
+        KafkaStreams kafkaStreams = eventSinkStreamsPool.get(streamType);
+        if (kafkaStreams != null && (kafkaStreams.state() == KafkaStreams.State.NOT_RUNNING)) {
+            KafkaStreams kafkaStreamsNew = eventSinkFactory.create();
+            kafkaStreamsNew.start();
+            eventSinkStreamsPool.put(streamType, kafkaStreamsNew);
+            log.info("Kafka stream streamType: {} state: {}", streamType, kafkaStreams.state());
+        }
     }
 
 }
