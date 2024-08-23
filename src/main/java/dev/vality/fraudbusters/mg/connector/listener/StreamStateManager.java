@@ -43,7 +43,6 @@ public class StreamStateManager {
     }
 
     private void createStreamIfShutdown(EventSinkFactory eventSinkFactory) {
-        if (eventSinkFactory.isEnabled()) {
             StreamType streamType = eventSinkFactory.getType();
             KafkaStreams kafkaStreams = eventSinkStreamsPool.get(streamType);
             if (kafkaStreams != null && (kafkaStreams.state() == KafkaStreams.State.NOT_RUNNING)) {
@@ -52,9 +51,6 @@ public class StreamStateManager {
                 eventSinkStreamsPool.put(streamType, kafkaStreamsNew);
                 log.info("Kafka stream streamType: {} state: {}", streamType, kafkaStreams.state());
             }
-        } else {
-            log.info("StartupListener eventSinkFactory: {} not enabled", eventSinkFactory);
-        }
     }
 
 }

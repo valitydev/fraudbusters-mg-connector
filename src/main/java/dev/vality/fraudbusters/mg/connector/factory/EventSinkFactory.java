@@ -9,6 +9,4 @@ public interface EventSinkFactory {
 
     KafkaStreams create();
 
-    Boolean isEnabled();
-
 }

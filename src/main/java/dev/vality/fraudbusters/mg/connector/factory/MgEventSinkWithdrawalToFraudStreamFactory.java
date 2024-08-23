@@ -2,7 +2,6 @@ package dev.vality.fraudbusters.mg.connector.factory;
 
 import dev.vality.damsel.fraudbusters.Withdrawal;
 import dev.vality.fistful.withdrawal.TimestampedChange;
-import dev.vality.fraudbusters.mg.connector.config.properties.StreamProperties;
 import dev.vality.fraudbusters.mg.connector.constant.StreamType;
 import dev.vality.fraudbusters.mg.connector.exception.StreamInitializationException;
 import dev.vality.fraudbusters.mg.connector.mapper.Mapper;
@@ -19,6 +18,7 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.Produced;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +27,11 @@ import java.util.Properties;
 
 @Slf4j
 @Component
+@ConditionalOnProperty(
+        value = "fb.stream.withdrawalEnabled",
+        havingValue = "true",
+        matchIfMissing = true
+)
 @RequiredArgsConstructor
 public class MgEventSinkWithdrawalToFraudStreamFactory implements EventSinkFactory {
 
@@ -34,7 +39,6 @@ public class MgEventSinkWithdrawalToFraudStreamFactory implements EventSinkFacto
     private final EventParser<TimestampedChange> withdrawalEventParser;
     private final RetryTemplate retryTemplate;
     private final Properties mgWithdrawalEventStreamProperties;
-    private final StreamProperties streamProperties;
     private final Serde<MachineEvent> machineEventSerde = new MachineEventSerde();
     private final Serde<Withdrawal> withdrawalSerde = new WithdrawalSerde();
     @Value("${kafka.topic.source.withdrawal}")
@@ -67,11 +71,6 @@ public class MgEventSinkWithdrawalToFraudStreamFactory implements EventSinkFacto
             log.error("Error when create stream e: ", e);
             throw new StreamInitializationException(e);
         }
-    }
-
-    @Override
-    public Boolean isEnabled() {
-        return streamProperties.isInvoiceEnabled();
     }
 
     private boolean filterChange(Map.Entry<MachineEvent, TimestampedChange> entry) {
