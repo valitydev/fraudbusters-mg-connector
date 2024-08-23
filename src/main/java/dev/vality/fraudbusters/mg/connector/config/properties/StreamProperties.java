@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Component
-@ConfigurationProperties(prefix = "stream")
+@ConfigurationProperties(prefix = "fb.stream")
 public class StreamProperties {
 
     private boolean withdrawalEnabled;
