@@ -341,9 +341,10 @@ public class BuildUtils {
             String paymentId,
             InvoicePaymentStatus paymentStatus,
             MockTBaseProcessor thriftBaseProcessor) throws IOException {
-        return thriftBaseProcessor.process(
+        dev.vality.damsel.domain.InvoicePayment process = thriftBaseProcessor.process(
                 new dev.vality.damsel.domain.InvoicePayment(),
-                new TBaseHandler<>(dev.vality.damsel.domain.InvoicePayment.class))
+                new TBaseHandler<>(dev.vality.damsel.domain.InvoicePayment.class));
+        return process
                 .setCreatedAt("2016-03-22T06:12:27Z")
                 .setId(paymentId)
                 .setOwnerId(partyId)
