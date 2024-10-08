@@ -30,8 +30,7 @@ public class BuildUtils {
                 .setBin(InvoiceTestConstant.CARD_BIN)
                 .setCategory(InvoiceTestConstant.CARD_CATEGORY)
                 .setIssuerCountry(Residence.PAN)
-                .setPaymentSystem(new dev.vality.fistful.base.PaymentSystemRef(
-                        dev.vality.fistful.base.LegacyBankCardPaymentSystem.mastercard.name()))
+                .setPaymentSystem(new dev.vality.fistful.base.PaymentSystemRef("mastercard"))
                 .setToken(InvoiceTestConstant.CARD_TOKEN_PROVIDER)
                 .setMaskedPan(InvoiceTestConstant.CARD_MASKED_PAN)
                 .setCardType(CardType.debit)
@@ -41,7 +40,7 @@ public class BuildUtils {
     public static dev.vality.fistful.base.CryptoWallet buildFistfulCryptoWallet() {
         dev.vality.fistful.base.CryptoWallet cryptoWallet = new dev.vality.fistful.base.CryptoWallet();
         cryptoWallet.setId("id");
-        cryptoWallet.setCurrency(dev.vality.fistful.base.CryptoCurrency.bitcoin);
+        cryptoWallet.setCurrency(new dev.vality.fistful.base.CryptoCurrencyRef("bitcoin"));
         return cryptoWallet;
     }
 
@@ -342,9 +341,10 @@ public class BuildUtils {
             String paymentId,
             InvoicePaymentStatus paymentStatus,
             MockTBaseProcessor thriftBaseProcessor) throws IOException {
-        return thriftBaseProcessor.process(
+        dev.vality.damsel.domain.InvoicePayment process = thriftBaseProcessor.process(
                 new dev.vality.damsel.domain.InvoicePayment(),
-                new TBaseHandler<>(dev.vality.damsel.domain.InvoicePayment.class))
+                new TBaseHandler<>(dev.vality.damsel.domain.InvoicePayment.class));
+        return process
                 .setCreatedAt("2016-03-22T06:12:27Z")
                 .setId(paymentId)
                 .setOwnerId(partyId)

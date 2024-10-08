@@ -24,7 +24,7 @@ public class WithdrawalBeanUtils {
                         .setBin(InvoiceTestConstant.CARD_BIN)
                         .setCategory(InvoiceTestConstant.CARD_CATEGORY)
                         .setIssuerCountry(Residence.PAN)
-                        .setPaymentSystem(new PaymentSystemRef(LegacyBankCardPaymentSystem.mastercard.name()))
+                        .setPaymentSystem(new PaymentSystemRef("asd"))
                         .setToken(InvoiceTestConstant.CARD_TOKEN_PROVIDER)
                         .setMaskedPan(InvoiceTestConstant.CARD_MASKED_PAN)
                         .setCardType(CardType.debit)

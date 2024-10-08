@@ -1,11 +1,11 @@
 server:
-  port: '@server.port@'
+  port: '${server.port}'
 
 management:
   security:
     flag: false
   server:
-    port: '@management.port@'
+    port: '${management.port}'
   metrics:
     export:
       statsd:
@@ -27,7 +27,7 @@ management:
 
 spring:
   application:
-    name: '@project.name@'
+    name: '${project.name}'
   output:
     ansi:
       enabled: always
@@ -45,7 +45,7 @@ spring:
         fixed.rate.timeout.ms: 60000
 
 info:
-  version: '@project.version@'
+  version: '${project.version}'
   stage: dev
 
 service:
