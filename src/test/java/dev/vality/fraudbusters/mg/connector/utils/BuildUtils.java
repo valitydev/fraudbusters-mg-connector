@@ -30,8 +30,7 @@ public class BuildUtils {
                 .setBin(InvoiceTestConstant.CARD_BIN)
                 .setCategory(InvoiceTestConstant.CARD_CATEGORY)
                 .setIssuerCountry(Residence.PAN)
-                .setPaymentSystem(new dev.vality.fistful.base.PaymentSystemRef(
-                        dev.vality.fistful.base.LegacyBankCardPaymentSystem.mastercard.name()))
+                .setPaymentSystem(new dev.vality.fistful.base.PaymentSystemRef("mastercard"))
                 .setToken(InvoiceTestConstant.CARD_TOKEN_PROVIDER)
                 .setMaskedPan(InvoiceTestConstant.CARD_MASKED_PAN)
                 .setCardType(CardType.debit)
@@ -41,7 +40,7 @@ public class BuildUtils {
     public static dev.vality.fistful.base.CryptoWallet buildFistfulCryptoWallet() {
         dev.vality.fistful.base.CryptoWallet cryptoWallet = new dev.vality.fistful.base.CryptoWallet();
         cryptoWallet.setId("id");
-        cryptoWallet.setCurrency(dev.vality.fistful.base.CryptoCurrency.bitcoin);
+        cryptoWallet.setCurrency(new dev.vality.fistful.base.CryptoCurrencyRef("bitcoin"));
         return cryptoWallet;
     }
 

@@ -29,7 +29,7 @@ public class FistfulResourceToDomainResourceConverter
         } else if (fistfulResource.isSetCryptoWallet()) {
             CryptoWallet cryptoWallet = new CryptoWallet()
                     .setId(fistfulResource.getCryptoWallet().getCryptoWallet().getId())
-                    .setCurrency(fistfulResource.getCryptoWallet().getCryptoWallet().getCurrency().name());
+                    .setCurrency(fistfulResource.getCryptoWallet().getCryptoWallet().getCurrency().id);
             resource.setCryptoWallet(cryptoWallet);
         } else if (fistfulResource.isSetDigitalWallet()) {
             DigitalWallet digitalWallet = new DigitalWallet()
