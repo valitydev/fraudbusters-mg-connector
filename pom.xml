@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>fraudbusters-mg-connector</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>fraudbusters-mg-connector</name>
@@ -23,7 +23,7 @@
         <dockerfile.base.service.tag>c0612d6052ac049496b72a23a04acb142035f249</dockerfile.base.service.tag>
         <dockerfile.registry>${env.REGISTRY}</dockerfile.registry>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <machinegun-proto.version>1.21-e4784ab</machinegun-proto.version>
+        <machinegun-proto.version>1.43-3decc8f</machinegun-proto.version>
         <fraudbusters-proto.version>1.112-e9d16e0</fraudbusters-proto.version>
         <fistful-proto.version>1.177-88e69a5</fistful-proto.version>
     </properties>
