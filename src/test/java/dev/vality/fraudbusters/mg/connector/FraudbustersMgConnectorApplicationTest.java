@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.thrift.TException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.stubbing.OngoingStubbing;
@@ -121,8 +122,8 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
         try {
             consumer.subscribe(Collections.singletonList(topicName));
             ConsumerRecords<String, Payment> poll = consumer.poll(Duration.ofSeconds(5));
-            assertTrue(poll.iterator().hasNext());
-            assertEquals(size, poll.count());
+            Assertions.assertTrue(poll.iterator().hasNext());
+            Assertions.assertEquals(size, poll.count());
             log.info("message: {}", poll.iterator().next().value());
         } catch (Exception e) {
             log.error("KafkaAbstractTest initialize e: ", e);
