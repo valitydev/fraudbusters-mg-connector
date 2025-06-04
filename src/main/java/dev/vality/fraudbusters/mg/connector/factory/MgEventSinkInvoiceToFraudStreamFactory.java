@@ -20,9 +20,7 @@ import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.Produced;
+import org.apache.kafka.streams.kstream.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
@@ -70,34 +68,34 @@ public class MgEventSinkInvoiceToFraudStreamFactory implements EventSinkFactory 
     public KafkaStreams create() {
         try {
             StreamsBuilder builder = new StreamsBuilder();
-            KStream<String, MgEventWrapper>[] branch =
+            Map<String, KStream<String, MgEventWrapper>> branch =
                     builder.stream(readTopic, Consumed.with(Serdes.String(), machineEventSerde))
                             .mapValues(machineEvent -> Map
                                     .entry(machineEvent, paymentEventParser.parseEvent(machineEvent)))
-                            .peek((s, payment) -> log
-                                    .debug("MgEventSinkToFraudStreamFactory machineEvent: {}", payment))
+                            .peek((s, payment) ->
+                                    log.debug("MgEventSinkToFraudStreamFactory machineEvent: {}", payment))
                             .filter((s, entry) -> entry.getValue().isSetInvoiceChanges())
-                            .peek((s, payment) -> log
-                                    .debug("MgEventSinkToFraudStreamFactory machineEvent: {}", payment))
+                            .peek((s, payment) ->
+                                    log.debug("MgEventSinkToFraudStreamFactory machineEvent: {}", payment))
                             .flatMapValues(entry -> entry.getValue().getInvoiceChanges().stream()
                                     .map(invoiceChange -> wrapMgEvent(entry, invoiceChange))
                                     .collect(Collectors.toList()))
-                            .branch((id, change) -> paymentMapper.accept(change.getChange()),
-                                    (id, change) -> chargebackPaymentMapper.accept(change.getChange()),
-                                    (id, change) -> refundPaymentMapper.accept(change.getChange())
-                            );
-
-            branch[0].mapValues(mgEventWrapper ->
+                            .split(Named.as("branch-"))
+                            .branch((id, change) -> paymentMapper.accept(change.getChange()))
+                            .branch((id, change) -> chargebackPaymentMapper.accept(change.getChange()))
+                            .branch((id, change) -> refundPaymentMapper.accept(change.getChange()))
+                            .defaultBranch();
+            branch.get("branch-0").mapValues(mgEventWrapper ->
                             retryTemplate.execute(args ->
                                     paymentMapper.map(mgEventWrapper.getChange(), mgEventWrapper.getEvent())))
                     .to(paymentTopic, Produced.with(Serdes.String(), paymentSerde));
 
-            branch[1].mapValues(mgEventWrapper ->
+            branch.get("branch-1").mapValues(mgEventWrapper ->
                             retryTemplate.execute(args ->
                                     chargebackPaymentMapper.map(mgEventWrapper.getChange(), mgEventWrapper.getEvent())))
                     .to(chargebackTopic, Produced.with(Serdes.String(), chargebackSerde));
 
-            branch[2].mapValues(mgEventWrapper ->
+            branch.get("branch-2").mapValues(mgEventWrapper ->
                             retryTemplate.execute(args ->
                                     refundPaymentMapper.map(mgEventWrapper.getChange(), mgEventWrapper.getEvent())))
                     .to(refundTopic, Produced.with(Serdes.String(), refundSerde));
