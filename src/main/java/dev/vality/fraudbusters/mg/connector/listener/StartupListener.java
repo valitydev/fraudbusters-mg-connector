@@ -38,6 +38,6 @@ public class StartupListener implements ApplicationListener<ContextRefreshedEven
         Runtime.getRuntime()
                 .addShutdownHook(new Thread(() -> kafkaStreams.close(Duration.ofSeconds(cleanTimeoutSec))));
         eventSinkStreamsPool.put(eventSinkFactory.getType(), kafkaStreams);
-        log.info("StartupListener start stream kafkaStreams: {}", kafkaStreams.allMetadata());
+        log.info("StartupListener start stream kafkaStreams: {}", kafkaStreams.metadataForAllStreamsClients());
     }
 }

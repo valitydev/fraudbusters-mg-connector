@@ -12,7 +12,6 @@ import dev.vality.fraudbusters.mg.connector.serde.deserializer.ChargebackDeseria
 import dev.vality.fraudbusters.mg.connector.serde.deserializer.PaymentDeserializer;
 import dev.vality.fraudbusters.mg.connector.serde.deserializer.RefundDeserializer;
 import dev.vality.fraudbusters.mg.connector.serde.deserializer.WithdrawalDeserializer;
-import dev.vality.fraudbusters.mg.connector.service.HgClientService;
 import dev.vality.fraudbusters.mg.connector.utils.BuildUtils;
 import dev.vality.fraudbusters.mg.connector.utils.MgEventSinkFlowGenerator;
 import dev.vality.fraudbusters.mg.connector.utils.WithdrawalFlowGenerator;

@@ -1,6 +1,7 @@
 package dev.vality.fraudbusters.mg.connector.utils;
 
 import dev.vality.damsel.base.Content;
+import dev.vality.damsel.domain.*;
 import dev.vality.damsel.domain.Invoice;
 import dev.vality.damsel.domain.InvoicePayment;
 import dev.vality.damsel.domain.InvoicePaymentChargeback;
@@ -8,7 +9,6 @@ import dev.vality.damsel.domain.InvoicePaymentChargebackPending;
 import dev.vality.damsel.domain.InvoicePaymentPending;
 import dev.vality.damsel.domain.InvoicePaymentRefund;
 import dev.vality.damsel.domain.InvoicePaymentRefundPending;
-import dev.vality.damsel.domain.*;
 import dev.vality.damsel.payment_processing.*;
 import dev.vality.fraudbusters.mg.connector.constant.PaymentSystemType;
 import dev.vality.geck.common.util.TypeUtil;

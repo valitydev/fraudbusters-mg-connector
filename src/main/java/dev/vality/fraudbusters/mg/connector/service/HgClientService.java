@@ -1,6 +1,8 @@
 package dev.vality.fraudbusters.mg.connector.service;
 
-import dev.vality.damsel.payment_processing.*;
+import dev.vality.damsel.payment_processing.Invoice;
+import dev.vality.damsel.payment_processing.InvoicePayment;
+import dev.vality.damsel.payment_processing.InvoicingSrv;
 import dev.vality.fraudbusters.mg.connector.domain.InvoicePaymentWrapper;
 import dev.vality.fraudbusters.mg.connector.exception.PaymentInfoNotFoundException;
 import dev.vality.fraudbusters.mg.connector.factory.EventRangeFactory;

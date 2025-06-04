@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.errors.LogAndFailExceptionHandler;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.boot.ssl.SslBundles;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,11 +21,11 @@ public class KafkaConfig {
     public static final String WITHDRAWAL_SUFFIX = "-withdrawal";
 
     private final KafkaProperties kafkaProperties;
-
+    private final ObjectProvider<SslBundles> sslBundles;
 
     @Bean
     public Properties mgInvoiceEventStreamProperties() {
-        final Map<String, Object> props = kafkaProperties.buildStreamsProperties();
+        final Map<String, Object> props = kafkaProperties.buildStreamsProperties(sslBundles.getIfAvailable());
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, kafkaProperties.getStreams().getApplicationId());
         props.put(StreamsConfig.CLIENT_ID_CONFIG, kafkaProperties.getClientId());
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
@@ -36,7 +38,7 @@ public class KafkaConfig {
 
     @Bean
     public Properties mgWithdrawalEventStreamProperties() {
-        final Map<String, Object> props = kafkaProperties.buildStreamsProperties();
+        final Map<String, Object> props = kafkaProperties.buildStreamsProperties(sslBundles.getIfAvailable());
         props.put(StreamsConfig.APPLICATION_ID_CONFIG,
                 kafkaProperties.getStreams().getApplicationId() + WITHDRAWAL_SUFFIX);
         props.put(StreamsConfig.CLIENT_ID_CONFIG, kafkaProperties.getClientId() + WITHDRAWAL_SUFFIX);
