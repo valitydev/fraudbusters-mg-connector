@@ -85,17 +85,17 @@ public class MgEventSinkInvoiceToFraudStreamFactory implements EventSinkFactory 
                             .branch((id, change) -> chargebackPaymentMapper.accept(change.getChange()))
                             .branch((id, change) -> refundPaymentMapper.accept(change.getChange()))
                             .defaultBranch();
-            branch.get("branch-0").mapValues(mgEventWrapper ->
+            branch.get("branch-1").mapValues(mgEventWrapper ->
                             retryTemplate.execute(args ->
                                     paymentMapper.map(mgEventWrapper.getChange(), mgEventWrapper.getEvent())))
                     .to(paymentTopic, Produced.with(Serdes.String(), paymentSerde));
 
-            branch.get("branch-1").mapValues(mgEventWrapper ->
+            branch.get("branch-2").mapValues(mgEventWrapper ->
                             retryTemplate.execute(args ->
                                     chargebackPaymentMapper.map(mgEventWrapper.getChange(), mgEventWrapper.getEvent())))
                     .to(chargebackTopic, Produced.with(Serdes.String(), chargebackSerde));
 
-            branch.get("branch-2").mapValues(mgEventWrapper ->
+            branch.get("branch-3").mapValues(mgEventWrapper ->
                             retryTemplate.execute(args ->
                                     refundPaymentMapper.map(mgEventWrapper.getChange(), mgEventWrapper.getEvent())))
                     .to(refundTopic, Produced.with(Serdes.String(), refundSerde));
