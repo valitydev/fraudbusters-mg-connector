@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.File;
@@ -46,7 +46,8 @@ import static org.mockito.ArgumentMatchers.any;
 public class IntegrationTest extends KafkaAbstractTest {
 
     private static final String PKCS_12 = "PKCS12";
-    @MockBean
+
+    @MockitoBean
     InvoicingSrv.Iface invoicingClient;
 
     public static <T> Consumer<String, T> createConsumerRemote() {

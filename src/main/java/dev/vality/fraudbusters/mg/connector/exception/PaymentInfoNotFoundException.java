@@ -11,13 +11,4 @@ public class PaymentInfoNotFoundException extends RuntimeException {
     public PaymentInfoNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
-
-    public PaymentInfoNotFoundException(Throwable cause) {
-        super(cause);
-    }
-
-    public PaymentInfoNotFoundException(String message, Throwable cause, boolean enableSuppression,
-                                        boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
 }

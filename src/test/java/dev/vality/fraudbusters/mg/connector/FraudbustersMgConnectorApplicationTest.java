@@ -1,6 +1,7 @@
 package dev.vality.fraudbusters.mg.connector;
 
 import dev.vality.damsel.domain.*;
+import dev.vality.damsel.domain_config_v2.RepositoryClientSrv;
 import dev.vality.damsel.fraudbusters.Payment;
 import dev.vality.damsel.payment_processing.Invoice;
 import dev.vality.damsel.payment_processing.InvoicingSrv;
@@ -26,7 +27,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
@@ -34,8 +35,6 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
@@ -53,14 +52,14 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
     public static final String SOURCE_ID = "source_id";
     public static final long TIMEOUT = 20000L;
 
-    @MockBean
+    @MockitoBean
     InvoicingSrv.Iface invoicingClient;
-    @MockBean
+    @MockitoBean
     ManagementSrv.Iface fistfulClient;
-    @MockBean
+    @MockitoBean
     dev.vality.fistful.destination.ManagementSrv.Iface destinationClient;
-    @MockBean
-    dev.vality.fistful.wallet.ManagementSrv.Iface walletClient;
+    @MockitoBean
+    RepositoryClientSrv.Iface dominantClient;
 
     @Autowired
     private EventRangeFactory eventRangeFactory;
@@ -107,7 +106,10 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
         when(fistfulClient.get(any(), any())).thenReturn(new WithdrawalState()
                 .setBody(WithdrawalBeanUtils.createCash()));
         when(destinationClient.get(any(), any())).thenReturn(WithdrawalBeanUtils.createDestinationState());
-        when(walletClient.get(any(), any())).thenReturn(WithdrawalBeanUtils.createWallet());
+        DomainObject domainObject = new DomainObject();
+        domainObject.setWalletConfig(WithdrawalBeanUtils.createWalletConfigObject());
+        when(dominantClient.checkoutObject(any(), any()))
+                .thenReturn(WithdrawalBeanUtils.createVersionedObject(domainObject));
 
         List<SinkEvent> sinkEvents = WithdrawalFlowGenerator.generateSuccessFlow(SOURCE_ID);
         sinkEvents.forEach(sinkEvent -> produceMessageToEventSink(MG_WITHDRAWAL, sinkEvent));

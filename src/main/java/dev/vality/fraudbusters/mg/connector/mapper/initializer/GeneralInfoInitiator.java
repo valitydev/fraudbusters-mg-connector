@@ -80,9 +80,6 @@ public class GeneralInfoInitiator implements InfoInitializer<InvoicePaymentStatu
     public PaymentTool initPaymentTool(Payer payer) {
         if (payer.isSetPaymentResource() && payer.getPaymentResource().isSetResource()) {
             return payer.getPaymentResource().getResource().getPaymentTool();
-        } else if (payer.isSetCustomer()) {
-            CustomerPayer customer = payer.getCustomer();
-            return customer.getPaymentTool();
         } else if (payer.isSetRecurrent()) {
             RecurrentPayer recurrent = payer.getRecurrent();
             return recurrent.getPaymentTool();
