@@ -7,31 +7,31 @@ import dev.vality.fistful.withdrawal.WithdrawalState;
 import dev.vality.fistful.withdrawal.status.Failed;
 import dev.vality.fistful.withdrawal.status.Pending;
 import dev.vality.fistful.withdrawal.status.Status;
-import dev.vality.fraudbusters.mg.connector.converter.FistfulAccountToDomainAccountConverter;
+import dev.vality.fraudbusters.mg.connector.converter.DominantAccountToDomainAccountConverter;
 import dev.vality.fraudbusters.mg.connector.converter.FistfulCashToDomainCashConverter;
 import dev.vality.fraudbusters.mg.connector.converter.FistfulCurrencyToDomainCurrencyConverter;
 import dev.vality.fraudbusters.mg.connector.converter.FistfulResourceToDomainResourceConverter;
 import dev.vality.fraudbusters.mg.connector.mapper.Mapper;
 import dev.vality.fraudbusters.mg.connector.service.DestinationClientService;
-import dev.vality.fraudbusters.mg.connector.service.WalletClientService;
+import dev.vality.fraudbusters.mg.connector.service.DominantClientService;
 import dev.vality.fraudbusters.mg.connector.service.WithdrawalClientService;
 import dev.vality.machinegun.eventsink.MachineEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static dev.vality.fraudbusters.mg.connector.mapper.impl.WithdrawalBeanUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 
 @Slf4j
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {FistfulAccountToDomainAccountConverter.class,
+@ContextConfiguration(classes = {DominantAccountToDomainAccountConverter.class,
         FistfulCashToDomainCashConverter.class,
         FistfulCurrencyToDomainCurrencyConverter.class,
         FistfulResourceToDomainResourceConverter.class,
@@ -44,32 +44,32 @@ public class WithdrawalMapperTest {
     public static final String WALLET_ID = "walletId";
     public static final String DESTINATION_ID = "destinationId";
 
-    @MockBean
+    @MockitoBean
     DestinationClientService destinationClientService;
 
-    @MockBean
+    @MockitoBean
     WithdrawalClientService withdrawalClientService;
 
-    @MockBean
-    WalletClientService walletClientService;
+    @MockitoBean
+    DominantClientService dominantClientService;
 
     @Autowired
     Mapper<TimestampedChange, MachineEvent, Withdrawal> logWithdrawalMapperDecorator;
 
     @Test
-    public void accept() {
+    void accept() {
         final Status failed = Status.failed(new Failed());
-        TimestampedChange timestampedChange = createStatusCahnge(failed);
+        TimestampedChange timestampedChange = createStatusChange(failed);
         boolean accept = logWithdrawalMapperDecorator.accept(timestampedChange);
         assertTrue(accept);
 
-        timestampedChange = createStatusCahnge(Status.pending(new Pending()));
+        timestampedChange = createStatusChange(Status.pending(new Pending()));
         accept = logWithdrawalMapperDecorator.accept(timestampedChange);
         assertFalse(accept);
     }
 
     @Test
-    public void map() {
+    void map() {
         final MachineEvent event = new MachineEvent();
         event.setSourceId(SOURCE_ID);
         event.setEventId(EVENT_ID);
@@ -79,19 +79,18 @@ public class WithdrawalMapperTest {
         withdrawalState.setDestinationId(DESTINATION_ID);
         withdrawalState.setWalletId(WALLET_ID);
         when(withdrawalClientService.getWithdrawalInfoFromFistful(SOURCE_ID, EVENT_ID)).thenReturn(withdrawalState);
-        when(walletClientService.getWalletInfoFromFistful(WALLET_ID)).thenReturn(createWallet());
+        when(dominantClientService.getWalletConfig(WALLET_ID)).thenReturn(createWalletConfigObject().getData());
         when(destinationClientService.getDestinationInfoFromFistful(DESTINATION_ID))
                 .thenReturn(createDestinationState());
 
-        TimestampedChange timestampedChange = createStatusCahnge(Status.failed(new Failed()));
+        TimestampedChange timestampedChange = createStatusChange(Status.failed(new Failed()));
         final Withdrawal map = logWithdrawalMapperDecorator.map(timestampedChange, event);
 
         assertEquals(RUB, map.getCost().getCurrency().symbolic_code);
         assertEquals(WithdrawalStatus.failed, map.getStatus());
         assertEquals(SOURCE_ID, map.getId());
         assertTrue(map.getDestinationResource().isSetBankCard());
-        assertEquals(IDENTITY_ID, map.getAccount().getIdentity());
-        assertEquals(WALLET_ACCOUNT_ID, map.getAccount().getId());
+        assertEquals(WALLET_ACCOUNT_ID, Long.valueOf(map.getAccount().getId()));
         assertEquals(RUB, map.getAccount().getCurrency().symbolic_code);
     }
 }

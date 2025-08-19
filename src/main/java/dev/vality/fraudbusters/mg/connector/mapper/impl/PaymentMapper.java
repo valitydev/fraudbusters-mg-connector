@@ -111,7 +111,7 @@ public class PaymentMapper implements Mapper<InvoiceChange, MachineEvent, Paymen
     }
 
     public boolean isRecurrent(Payer payer) {
-        return payer.isSetRecurrent() || payer.isSetCustomer();
+        return payer.isSetRecurrent();
     }
 
     public boolean isMobile(PaymentTool paymentTool) {

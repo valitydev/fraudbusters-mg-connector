@@ -55,8 +55,8 @@ service:
   withdrawal:
     url: http://hellgate:8022/v1/processing/invoicing
     networkTimeout: 5000
-  wallet:
-    url: http://hellgate:8022/v1/processing/invoicing
+  dominant:
+    url: http://dominant:8022/v1/test
     networkTimeout: 5000
   destination:
     url: http://hellgate:8022/v1/processing/invoicing

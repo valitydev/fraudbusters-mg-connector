@@ -389,16 +389,16 @@ public class MgEventSinkFlowGenerator {
     }
 
     private static Payer createCustomerPayer() {
-        Payer customer =
-                Payer.customer(new CustomerPayer("custId", "1", "rec_paym_tool", createBankCard(), new ContactInfo()));
-        customer.setPaymentResource(
+        Payer recurrent =
+                Payer.recurrent(new RecurrentPayer());
+        recurrent.setPaymentResource(
                 new PaymentResourcePayer()
                         .setResource(new DisposablePaymentResource()
                                 .setClientInfo(createClientInfo())
                                 .setPaymentTool(createBankCard()))
                         .setContactInfo(new ContactInfo()
                                 .setEmail(TEST_MAIL_RU)));
-        return customer;
+        return recurrent;
     }
 
     private static PaymentTool createBankCard() {

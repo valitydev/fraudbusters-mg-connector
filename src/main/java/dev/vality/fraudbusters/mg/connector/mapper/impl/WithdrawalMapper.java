@@ -4,16 +4,15 @@ import dev.vality.damsel.fraudbusters.Resource;
 import dev.vality.damsel.fraudbusters.Withdrawal;
 import dev.vality.damsel.fraudbusters.WithdrawalStatus;
 import dev.vality.fistful.destination.DestinationState;
-import dev.vality.fistful.wallet.WalletState;
 import dev.vality.fistful.withdrawal.TimestampedChange;
 import dev.vality.fistful.withdrawal.WithdrawalState;
 import dev.vality.fraudbusters.mg.connector.constant.WithdrawalEventType;
-import dev.vality.fraudbusters.mg.connector.converter.FistfulAccountToDomainAccountConverter;
+import dev.vality.fraudbusters.mg.connector.converter.DominantAccountToDomainAccountConverter;
 import dev.vality.fraudbusters.mg.connector.converter.FistfulCashToDomainCashConverter;
 import dev.vality.fraudbusters.mg.connector.converter.FistfulResourceToDomainResourceConverter;
 import dev.vality.fraudbusters.mg.connector.mapper.Mapper;
 import dev.vality.fraudbusters.mg.connector.service.DestinationClientService;
-import dev.vality.fraudbusters.mg.connector.service.WalletClientService;
+import dev.vality.fraudbusters.mg.connector.service.DominantClientService;
 import dev.vality.fraudbusters.mg.connector.service.WithdrawalClientService;
 import dev.vality.fraudbusters.mg.connector.utils.WithdrawalModelUtil;
 import dev.vality.geck.common.util.TBaseUtil;
@@ -29,9 +28,9 @@ public class WithdrawalMapper implements Mapper<TimestampedChange, MachineEvent,
 
     private final WithdrawalClientService withdrawalClientService;
     private final DestinationClientService destinationClientService;
-    private final WalletClientService walletClientService;
+    private final DominantClientService dominantClientService;
     private final FistfulResourceToDomainResourceConverter fistfulResourceToDomainResourceConverter;
-    private final FistfulAccountToDomainAccountConverter fistfulAccountToDomainAccountConverter;
+    private final DominantAccountToDomainAccountConverter accountConverter;
     private final FistfulCashToDomainCashConverter fistfulCashToDomainCashConverter;
 
     @Override
@@ -57,10 +56,10 @@ public class WithdrawalMapper implements Mapper<TimestampedChange, MachineEvent,
 
         final DestinationState destinationInfo = destinationClientService.getDestinationInfoFromFistful(
                 withdrawalInfo.getDestinationId());
-        final WalletState walletInfoFromFistful = walletClientService.getWalletInfoFromFistful(
+        final var walletConfig = dominantClientService.getWalletConfig(
                 withdrawalInfo.getWalletId());
 
-        withdrawal.setAccount(fistfulAccountToDomainAccountConverter.convert(walletInfoFromFistful.getAccount()));
+        withdrawal.setAccount(accountConverter.convert(walletConfig.getAccount()));
 
         final Resource resource = fistfulResourceToDomainResourceConverter.convert(destinationInfo.getResource());
         withdrawal.setDestinationResource(resource);

@@ -1,5 +1,6 @@
 package dev.vality.fraudbusters.mg.connector.config;
 
+import dev.vality.damsel.domain_config_v2.RepositoryClientSrv;
 import dev.vality.damsel.payment_processing.InvoicingSrv;
 import dev.vality.fistful.withdrawal.ManagementSrv;
 import dev.vality.woody.thrift.impl.http.THSpawnClientBuilder;
@@ -44,13 +45,13 @@ public class HgConfig {
     }
 
     @Bean
-    public dev.vality.fistful.wallet.ManagementSrv.Iface walletClient(
-            @Value("${service.wallet.url}") Resource resource,
-            @Value("${service.wallet.networkTimeout}") int networkTimeout) throws IOException {
+    public RepositoryClientSrv.Iface dominantClient(
+            @Value("${service.dominant.url}") Resource resource,
+            @Value("${service.dominant.networkTimeout}") int networkTimeout) throws IOException {
         return new THSpawnClientBuilder()
                 .withNetworkTimeout(networkTimeout)
                 .withAddress(resource.getURI())
-                .build(dev.vality.fistful.wallet.ManagementSrv.Iface.class);
+                .build(RepositoryClientSrv.Iface.class);
     }
 
 }

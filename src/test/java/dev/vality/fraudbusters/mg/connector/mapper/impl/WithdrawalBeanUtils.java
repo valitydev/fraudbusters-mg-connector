@@ -1,9 +1,13 @@
 package dev.vality.fraudbusters.mg.connector.mapper.impl;
 
-import dev.vality.fistful.account.Account;
+import dev.vality.damsel.domain.DomainObject;
+import dev.vality.damsel.domain.WalletAccount;
+import dev.vality.damsel.domain.WalletConfig;
+import dev.vality.damsel.domain.WalletConfigObject;
+import dev.vality.damsel.domain_config_v2.VersionedObject;
+import dev.vality.damsel.domain_config_v2.VersionedObjectInfo;
 import dev.vality.fistful.base.*;
 import dev.vality.fistful.destination.DestinationState;
-import dev.vality.fistful.wallet.WalletState;
 import dev.vality.fistful.withdrawal.Change;
 import dev.vality.fistful.withdrawal.StatusChange;
 import dev.vality.fistful.withdrawal.TimestampedChange;
@@ -12,8 +16,7 @@ import dev.vality.fraudbusters.mg.connector.utils.InvoiceTestConstant;
 
 public class WithdrawalBeanUtils {
 
-    public static final String IDENTITY_ID = "identity_id";
-    public static final String WALLET_ACCOUNT_ID = "wallet_account_id";
+    public static final long WALLET_ACCOUNT_ID = 123;
     public static final String RUB = "RUB";
 
     public static DestinationState createDestinationState() {
@@ -32,7 +35,7 @@ public class WithdrawalBeanUtils {
         return new DestinationState().setResource(resource);
     }
 
-    public static TimestampedChange createStatusCahnge(Status failed) {
+    public static TimestampedChange createStatusChange(Status failed) {
         final Change change = new Change();
         final TimestampedChange timestampedChange = new TimestampedChange();
         change.setStatusChanged(new StatusChange()
@@ -42,12 +45,20 @@ public class WithdrawalBeanUtils {
         return timestampedChange;
     }
 
-    public static WalletState createWallet() {
-        return new WalletState()
-                .setAccount(new Account()
-                        .setCurrency(new CurrencyRef(RUB))
-                        .setId(WALLET_ACCOUNT_ID)
-                        .setIdentity(IDENTITY_ID));
+    public static WalletConfigObject createWalletConfigObject() {
+        return new WalletConfigObject()
+                .setData(new WalletConfig()
+                        .setAccount(new WalletAccount()
+                                .setCurrency(new dev.vality.damsel.domain.CurrencyRef("RUB"))
+                                .setSettlement(WALLET_ACCOUNT_ID)));
+    }
+
+    public static VersionedObject createVersionedObject(DomainObject domainObject) {
+        VersionedObject versionedObject = new VersionedObject();
+        versionedObject.setObject(domainObject);
+        versionedObject.setInfo(new VersionedObjectInfo()
+                .setVersion(1L));
+        return versionedObject;
     }
 
     public static Cash createCash() {
