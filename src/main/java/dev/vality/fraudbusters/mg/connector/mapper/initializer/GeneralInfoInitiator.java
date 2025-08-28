@@ -90,8 +90,8 @@ public class GeneralInfoInitiator implements InfoInitializer<InvoicePaymentStatu
 
     public ReferenceInfo initReferenceInfo(Invoice invoice) {
         return ReferenceInfo.merchant_info(new MerchantInfo()
-                .setPartyId(invoice.getOwnerId())
-                .setShopId(invoice.getShopId())
+                .setPartyId(invoice.getPartyRef().id)
+                .setShopId(invoice.getShopRef().id)
         );
     }
 
