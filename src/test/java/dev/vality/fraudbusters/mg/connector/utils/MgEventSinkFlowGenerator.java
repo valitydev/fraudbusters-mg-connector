@@ -350,8 +350,8 @@ public class MgEventSinkFlowGenerator {
                                 .setId(PAYMENT_ID)
                                 .setStatus(invoicePaymentStatus)
                                 .setPayer(createCustomerPayer())
-                                .setOwnerId(PARTY_ID)
-                                .setShopId(SHOP_ID)
+                                .setPartyRef(new PartyConfigRef(PARTY_ID))
+                                .setShopRef(new ShopConfigRef(SHOP_ID))
                                 .setFlow(createFlow())));
         InvoiceChange invoiceChange = new InvoiceChange();
         invoiceChange.setInvoicePaymentChange(new InvoicePaymentChange()
