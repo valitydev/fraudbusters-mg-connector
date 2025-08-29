@@ -87,8 +87,8 @@ public class BuildUtils {
                 new Invoice(),
                 new TBaseHandler<>(Invoice.class))
                 .setId(invoiceId)
-                .setShopId(shopId)
-                .setOwnerId(partyId)
+                .setShopRef(new ShopConfigRef(shopId))
+                .setPartyRef(new PartyConfigRef(partyId))
                 .setCreatedAt(TypeUtil.temporalToString(Instant.now()))
                 .setContext(new Content("lel", ByteBuffer.wrap("{\"payment_id\": 271771960}".getBytes())))
                 .setDue("2016-03-22T06:12:27Z")
@@ -347,8 +347,8 @@ public class BuildUtils {
         return process
                 .setCreatedAt("2016-03-22T06:12:27Z")
                 .setId(paymentId)
-                .setOwnerId(partyId)
-                .setShopId(shopId)
+                .setPartyRef(new PartyConfigRef(partyId))
+                .setShopRef(new ShopConfigRef(shopId))
                 .setCost(new Cash()
                         .setAmount(123L)
                         .setCurrency(new CurrencyRef("RUB")))
