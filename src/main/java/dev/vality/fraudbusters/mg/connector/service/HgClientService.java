@@ -5,6 +5,7 @@ import dev.vality.damsel.payment_processing.InvoicePayment;
 import dev.vality.damsel.payment_processing.InvoicingSrv;
 import dev.vality.fraudbusters.mg.connector.domain.InvoicePaymentWrapper;
 import dev.vality.fraudbusters.mg.connector.exception.PaymentInfoNotFoundException;
+import dev.vality.fraudbusters.mg.connector.exception.PaymentInfoVersionNotFoundException;
 import dev.vality.fraudbusters.mg.connector.factory.EventRangeFactory;
 import dev.vality.woody.api.flow.error.WUnavailableResultException;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +53,8 @@ public class HgClientService {
             Invoice invoiceInfo = invoicingClient.get(invoiceId, eventRangeFactory.create(sequenceId));
             if (invoiceInfo == null) {
                 throw new PaymentInfoNotFoundException("Not found invoice info in hg!");
+            } else if (invoiceInfo.getLatestEventId() != sequenceId) {
+                throw new PaymentInfoVersionNotFoundException("Not found invoice info in hg!");
             }
             invoicePaymentWrapper.setInvoice(invoiceInfo.getInvoice());
             findPaymentPredicate.apply(eventId, invoiceInfo)
