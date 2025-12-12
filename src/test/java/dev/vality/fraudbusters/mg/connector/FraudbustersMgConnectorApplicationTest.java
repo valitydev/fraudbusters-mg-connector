@@ -159,7 +159,6 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
                         sourceId, "1", "1", "1",
                         InvoiceStatus.paid(new InvoicePaid()),
                         InvoicePaymentStatus.processed(new InvoicePaymentProcessed())));
-        mockPayment(sourceId, 5);
     }
 
     private void mockRefund(String sourceId, int sequenceId, String refundId) throws TException, IOException {
