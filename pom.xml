@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>fraudbusters-mg-connector</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>fraudbusters-mg-connector</name>
@@ -182,7 +182,7 @@
                     <dependency>
                         <groupId>org.apache.maven.shared</groupId>
                         <artifactId>maven-filtering</artifactId>
-                        <version>1.3</version>
+                        <version>3.4.0</version>
                     </dependency>
                 </dependencies>
                 <configuration>
