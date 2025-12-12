@@ -52,6 +52,7 @@ public class BuildUtils {
     }
 
     public static dev.vality.damsel.payment_processing.Invoice buildInvoice(
+            int sequenceId,
             String partyId,
             String shopId,
             String invoiceId,
@@ -64,7 +65,8 @@ public class BuildUtils {
         dev.vality.damsel.payment_processing.Invoice invoice = new dev.vality.damsel.payment_processing.Invoice()
                 .setInvoice(buildInvoice(partyId, shopId, invoiceId, invoiceStatus, thriftBaseProcessor))
                 .setPayments(buildPayments(partyId, shopId, paymentId, refundId, chargebackId, paymentStatus,
-                        thriftBaseProcessor));
+                        thriftBaseProcessor))
+                .setLatestEventId(sequenceId);
 
         if (invoice.getPayments().get(0).getPayment().getPayer().isSetPaymentResource()) {
             invoice.getPayments().get(0).getPayment().getPayer().getPaymentResource().getResource()

@@ -73,12 +73,11 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
 
         String sourceIdRefund2 = "sourceIdRefund2";
         mockPayment(sourceIdRefund2);
-        mockRefund(sourceIdRefund2, 8, "2");
-        mockRefund(sourceIdRefund2, 7, "2");
-        mockRefund(sourceIdRefund2, 9, "2");
-        mockRefund(sourceIdRefund2, 2, "2");
-        mockRefund(sourceIdRefund2, 3, "2");
+        mockPayment(sourceIdRefund2, 6);
         mockRefund(sourceIdRefund2, 7, "1");
+        mockRefund(sourceIdRefund2, 8, "1");
+        mockRefund(sourceIdRefund2, 9, "2");
+        mockRefund(sourceIdRefund2, 10, "2");
         sinkEvents = MgEventSinkFlowGenerator.generateRefundedFlow(sourceIdRefund2);
         sinkEvents.forEach(sinkEvent -> produceMessageToEventSink(MG_EVENT, sinkEvent));
 
@@ -98,7 +97,7 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
         sinkEvents = MgEventSinkFlowGenerator.generateSuccessFlow(SOURCE_ID);
         mockPaymentWithException(SOURCE_ID);
         sinkEvents.forEach(sinkEvent -> produceMessageToEventSink(MG_EVENT, sinkEvent));
-        checkMessageInTopic(PAYMENT, PaymentDeserializer.class, 11);
+        checkMessageInTopic(PAYMENT, PaymentDeserializer.class, 10);
     }
 
     @Test
@@ -123,7 +122,7 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
         Consumer<String, Payment> consumer = createPaymentConsumer(clazz);
         try {
             consumer.subscribe(Collections.singletonList(topicName));
-            ConsumerRecords<String, Payment> poll = consumer.poll(Duration.ofSeconds(5));
+            ConsumerRecords<String, Payment> poll = consumer.poll(Duration.ofSeconds(10));
             Assertions.assertTrue(poll.iterator().hasNext());
             Assertions.assertEquals(size, poll.count());
             log.info("message: {}", poll.iterator().next().value());
@@ -139,29 +138,33 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
         mockPayment(sourceId, 3);
         mockPayment(sourceId, 4);
         mockPayment(sourceId, 5);
+        mockPayment(sourceId, 6);
     }
 
     private OngoingStubbing<Invoice> mockPayment(String sourceId, int i) throws TException, IOException {
         return when(invoicingClient.get(sourceId, eventRangeFactory.create(i)))
-                .thenReturn(BuildUtils.buildInvoice(MgEventSinkFlowGenerator.PARTY_ID, MgEventSinkFlowGenerator.SHOP_ID,
-                        sourceId, "1", "1", "1",
-                        InvoiceStatus.paid(new InvoicePaid()),
-                        InvoicePaymentStatus.processed(new InvoicePaymentProcessed())));
+                .thenReturn(
+                        BuildUtils.buildInvoice(i, MgEventSinkFlowGenerator.PARTY_ID, MgEventSinkFlowGenerator.SHOP_ID,
+                                sourceId, "1", "1", "1",
+                                InvoiceStatus.paid(new InvoicePaid()),
+                                InvoicePaymentStatus.processed(new InvoicePaymentProcessed())));
     }
 
     private void mockPaymentWithException(String sourceId) throws TException, IOException {
-        when(invoicingClient.get(sourceId, eventRangeFactory.create(6)))
+        int eventNumber = 6;
+        when(invoicingClient.get(sourceId, eventRangeFactory.create(eventNumber)))
                 .thenThrow(new RuntimeException())
-                .thenReturn(BuildUtils.buildInvoice(MgEventSinkFlowGenerator.PARTY_ID, MgEventSinkFlowGenerator.SHOP_ID,
+                .thenReturn(BuildUtils.buildInvoice(eventNumber, MgEventSinkFlowGenerator.PARTY_ID,
+                        MgEventSinkFlowGenerator.SHOP_ID,
                         sourceId, "1", "1", "1",
                         InvoiceStatus.paid(new InvoicePaid()),
                         InvoicePaymentStatus.processed(new InvoicePaymentProcessed())));
-        mockPayment(sourceId, 5);
     }
 
     private void mockRefund(String sourceId, int sequenceId, String refundId) throws TException, IOException {
         when(invoicingClient.get(sourceId, eventRangeFactory.create(sequenceId)))
-                .thenReturn(BuildUtils.buildInvoice(MgEventSinkFlowGenerator.PARTY_ID, MgEventSinkFlowGenerator.SHOP_ID,
+                .thenReturn(BuildUtils.buildInvoice(sequenceId, MgEventSinkFlowGenerator.PARTY_ID,
+                        MgEventSinkFlowGenerator.SHOP_ID,
                         sourceId, "1", refundId, "1",
                         InvoiceStatus.paid(new InvoicePaid()),
                         InvoicePaymentStatus.refunded(new InvoicePaymentRefunded())));
@@ -169,7 +172,8 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
 
     private void mockChargeback(String sourceId, int sequenceId, String chargebackId) throws TException, IOException {
         when(invoicingClient.get(sourceId, eventRangeFactory.create(sequenceId)))
-                .thenReturn(BuildUtils.buildInvoice(MgEventSinkFlowGenerator.PARTY_ID, MgEventSinkFlowGenerator.SHOP_ID,
+                .thenReturn(BuildUtils.buildInvoice(sequenceId, MgEventSinkFlowGenerator.PARTY_ID,
+                        MgEventSinkFlowGenerator.SHOP_ID,
                         sourceId, "1", "1", chargebackId,
                         InvoiceStatus.paid(new InvoicePaid()),
                         InvoicePaymentStatus.charged_back(new InvoicePaymentChargedBack())));

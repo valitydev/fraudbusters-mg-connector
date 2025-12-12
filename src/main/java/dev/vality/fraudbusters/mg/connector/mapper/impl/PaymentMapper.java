@@ -31,16 +31,20 @@ public class PaymentMapper implements Mapper<InvoiceChange, MachineEvent, Paymen
 
     @Override
     public boolean accept(InvoiceChange change) {
-        return InvoiceEventType.INVOICE_PAYMENT_STATUS_CHANGED.getFilter().match(change)
+        return (InvoiceEventType.INVOICE_PAYMENT_STATUS_CHANGED.getFilter().match(change)
                 && (change.getInvoicePaymentChange().getPayload().getInvoicePaymentStatusChanged().getStatus()
-                .isSetFailed()
-                || change.getInvoicePaymentChange().getPayload().getInvoicePaymentStatusChanged().getStatus()
-                .isSetProcessed()
-                || change.getInvoicePaymentChange().getPayload().getInvoicePaymentStatusChanged().getStatus()
-                .isSetCaptured())
-                || InvoiceEventType.INVOICE_PAYMENT_STARTED.getFilter().match(change)
-                && change.getInvoicePaymentChange().getPayload().getInvoicePaymentStarted().getPayment().getStatus()
-                .isSetPending();
+                            .isSetFailed()
+                    || change.getInvoicePaymentChange().getPayload().getInvoicePaymentStatusChanged().getStatus()
+                            .isSetProcessed()
+                    || change.getInvoicePaymentChange().getPayload().getInvoicePaymentStatusChanged().getStatus()
+                            .isSetCaptured()))
+                || (
+                       InvoiceEventType.INVOICE_PAYMENT_STARTED.getFilter().match(change)
+                       && change.getInvoicePaymentChange().getPayload().isSetInvoicePaymentStarted()
+                       &&
+                       change.getInvoicePaymentChange().getPayload().getInvoicePaymentStarted().getPayment().getStatus()
+                               .isSetPending()
+                );
     }
 
     @Override
@@ -99,7 +103,9 @@ public class PaymentMapper implements Mapper<InvoiceChange, MachineEvent, Paymen
             return hgClientService.getInvoiceInfo(event.getSourceId(), findPayment(), paymentId, event.getEventId());
         } catch (Exception e) {
             log.warn("Problem when get invoice info for event: {} change: {} status: {}", event,
-                    change, change.getInvoicePaymentChange().getPayload().getInvoicePaymentStatusChanged().getStatus());
+                    change, change.getInvoicePaymentChange().getPayload().isSetInvoicePaymentStatusChanged()
+                            ? change.getInvoicePaymentChange().getPayload().getInvoicePaymentStatusChanged().getStatus()
+                            : "Unknown");
             throw e;
         }
     }

@@ -6,7 +6,7 @@
     <parent>
         <groupId>dev.vality</groupId>
         <artifactId>service-parent-pom</artifactId>
-        <version>3.1.7</version>
+        <version>3.1.9</version>
     </parent>
 
     <artifactId>fraudbusters-mg-connector</artifactId>
@@ -25,15 +25,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <machinegun-proto.version>1.43-3decc8f</machinegun-proto.version>
         <fraudbusters-proto.version>1.118-79e9e73</fraudbusters-proto.version>
-        <fistful-proto.version>1.181-f478436</fistful-proto.version>
     </properties>
 
     <dependencies>
         <!--vality-->
         <dependency>
             <groupId>dev.vality.geck</groupId>
-            <artifactId>serializer</artifactId>
-            <version>1.0.2</version>
+            <artifactId>common</artifactId>
         </dependency>
         <dependency>
             <groupId>dev.vality</groupId>
@@ -61,11 +59,23 @@
         <dependency>
             <groupId>dev.vality</groupId>
             <artifactId>fistful-proto</artifactId>
-            <version>${fistful-proto.version}</version>
+            <version>1.188-f7ce08e</version>
         </dependency>
         <dependency>
             <groupId>dev.vality</groupId>
             <artifactId>damsel</artifactId>
+            <version>1.678-09e4c72</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.vality</groupId>
+            <artifactId>sink-common-lib</artifactId>
+            <version>0.0.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>dev.vality</groupId>
+                    <artifactId>machinegun-proto</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!--spring-->

@@ -75,10 +75,11 @@ public class IntegrationTest extends KafkaAbstractTest {
     public void contextLoads() throws TException, IOException, InterruptedException {
         Mockito.when(invoicingClient.get(any(), any()))
                 .thenThrow(new RuntimeException())
-                .thenReturn(BuildUtils.buildInvoice(MgEventSinkFlowGenerator.PARTY_ID, MgEventSinkFlowGenerator.SHOP_ID,
-                        "sourceId", "1", "1", "1",
-                        InvoiceStatus.paid(new InvoicePaid()),
-                        InvoicePaymentStatus.processed(new InvoicePaymentProcessed())));
+                .thenReturn(
+                        BuildUtils.buildInvoice(1, MgEventSinkFlowGenerator.PARTY_ID, MgEventSinkFlowGenerator.SHOP_ID,
+                                "sourceId", "1", "1", "1",
+                                InvoiceStatus.paid(new InvoicePaid()),
+                                InvoicePaymentStatus.processed(new InvoicePaymentProcessed())));
         int size = rewriteDataFromRealTopic();
 
         Consumer<String, Payment> consumerPayment = createPaymentConsumer(PaymentDeserializer.class);
