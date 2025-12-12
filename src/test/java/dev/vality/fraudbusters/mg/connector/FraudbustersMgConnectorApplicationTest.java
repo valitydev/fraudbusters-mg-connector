@@ -73,12 +73,10 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
 
         String sourceIdRefund2 = "sourceIdRefund2";
         mockPayment(sourceIdRefund2);
-        mockRefund(sourceIdRefund2, 8, "2");
         mockRefund(sourceIdRefund2, 7, "2");
+        mockRefund(sourceIdRefund2, 8, "2");
         mockRefund(sourceIdRefund2, 9, "2");
-        mockRefund(sourceIdRefund2, 2, "2");
-        mockRefund(sourceIdRefund2, 3, "2");
-        mockRefund(sourceIdRefund2, 7, "1");
+        mockRefund(sourceIdRefund2, 10, "2");
         sinkEvents = MgEventSinkFlowGenerator.generateRefundedFlow(sourceIdRefund2);
         sinkEvents.forEach(sinkEvent -> produceMessageToEventSink(MG_EVENT, sinkEvent));
 

@@ -47,7 +47,7 @@ public class MgEventSinkFlowGenerator {
 
     public static List<SinkEvent> generateRefundedFlow(String sourceId) {
         List<SinkEvent> sinkEvents = new ArrayList<>();
-        Long sequenceId = 0L;
+        Long sequenceId = 1L;
         sinkEvents.add(createSinkEvent(createMessageCreateInvoice(sourceId, sequenceId++)));
         sinkEvents.add(createSinkEvent(createMessagePaymentPending(sourceId, sequenceId++)));
         sinkEvents.add(createSinkEvent(createMessagePaymentPendingChangeStatus(sourceId, sequenceId++)));
