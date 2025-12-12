@@ -34,12 +34,12 @@ public class MgEventSinkFlowGenerator {
     public static List<SinkEvent> generateSuccessFlow(String sourceId) {
         List<SinkEvent> sinkEvents = new ArrayList<>();
         Long sequenceId = 1L;
-        sinkEvents.add(createSinkEvent(createMessageCreateInvoice(sourceId, sequenceId++)));
-        sinkEvents.add(createSinkEvent(createMessagePaymentPending(sourceId, sequenceId++)));
-        sinkEvents.add(createSinkEvent(createMessagePaymentPending(sourceId, sequenceId++)));
-        sinkEvents.add(createSinkEvent(createMessagePaymentPending(sourceId, sequenceId++)));
-        sinkEvents.add(createSinkEvent(createMessagePaymentProcessed(sourceId, sequenceId++)));
-        sinkEvents.add(createSinkEvent(createMessageInvoiceCaptured(sourceId, sequenceId++)));
+        sinkEvents.add(createSinkEvent(createMessageCreateInvoice(sourceId, sequenceId)));
+        sinkEvents.add(createSinkEvent(createMessagePaymentPending(sourceId, sequenceId)));
+        sinkEvents.add(createSinkEvent(createMessagePaymentPending(sourceId, sequenceId)));
+        sinkEvents.add(createSinkEvent(createMessagePaymentPending(sourceId, sequenceId)));
+        sinkEvents.add(createSinkEvent(createMessagePaymentProcessed(sourceId, sequenceId)));
+        sinkEvents.add(createSinkEvent(createMessageInvoiceCaptured(sourceId, sequenceId)));
 
         sinkEvents.add(createSinkEvent(createMessagePaymentRefunded(sourceId, sequenceId)));
         return sinkEvents;
