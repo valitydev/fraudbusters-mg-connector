@@ -138,6 +138,7 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
         mockPayment(sourceId, 3);
         mockPayment(sourceId, 4);
         mockPayment(sourceId, 5);
+        mockPayment(sourceId, 6);
     }
 
     private OngoingStubbing<Invoice> mockPayment(String sourceId, int i) throws TException, IOException {
