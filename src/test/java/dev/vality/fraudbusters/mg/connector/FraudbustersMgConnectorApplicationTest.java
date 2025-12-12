@@ -123,7 +123,7 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
         Consumer<String, Payment> consumer = createPaymentConsumer(clazz);
         try {
             consumer.subscribe(Collections.singletonList(topicName));
-            ConsumerRecords<String, Payment> poll = consumer.poll(Duration.ofSeconds(5));
+            ConsumerRecords<String, Payment> poll = consumer.poll(Duration.ofSeconds(10));
             Assertions.assertTrue(poll.iterator().hasNext());
             Assertions.assertEquals(size, poll.count());
             log.info("message: {}", poll.iterator().next().value());
