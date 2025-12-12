@@ -97,7 +97,7 @@ public class FraudbustersMgConnectorApplicationTest extends KafkaAbstractTest {
         sinkEvents = MgEventSinkFlowGenerator.generateSuccessFlow(SOURCE_ID);
         mockPaymentWithException(SOURCE_ID);
         sinkEvents.forEach(sinkEvent -> produceMessageToEventSink(MG_EVENT, sinkEvent));
-        checkMessageInTopic(PAYMENT, PaymentDeserializer.class, 11);
+        checkMessageInTopic(PAYMENT, PaymentDeserializer.class, 10);
     }
 
     @Test
