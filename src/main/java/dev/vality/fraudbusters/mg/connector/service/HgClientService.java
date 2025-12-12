@@ -54,7 +54,9 @@ public class HgClientService {
             if (invoiceInfo == null) {
                 throw new PaymentInfoNotFoundException("Not found invoice info in hg!");
             } else if (invoiceInfo.getLatestEventId() != sequenceId) {
-                throw new PaymentInfoVersionNotFoundException("Not found invoice info in hg!");
+                throw new PaymentInfoVersionNotFoundException(
+                        String.format("Not found invoice info in hg wait: %s come: %s", sequenceId,
+                                invoiceInfo.getLatestEventId()));
             }
             invoicePaymentWrapper.setInvoice(invoiceInfo.getInvoice());
             findPaymentPredicate.apply(eventId, invoiceInfo)
