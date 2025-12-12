@@ -38,13 +38,13 @@ public class PaymentMapper implements Mapper<InvoiceChange, MachineEvent, Paymen
                             .isSetProcessed()
                     || change.getInvoicePaymentChange().getPayload().getInvoicePaymentStatusChanged().getStatus()
                             .isSetCaptured()))
-                || (
+               || (
                        InvoiceEventType.INVOICE_PAYMENT_STARTED.getFilter().match(change)
                        && change.getInvoicePaymentChange().getPayload().isSetInvoicePaymentStarted()
                        &&
                        change.getInvoicePaymentChange().getPayload().getInvoicePaymentStarted().getPayment().getStatus()
                                .isSetPending()
-                );
+               );
     }
 
     @Override
@@ -103,9 +103,9 @@ public class PaymentMapper implements Mapper<InvoiceChange, MachineEvent, Paymen
             return hgClientService.getInvoiceInfo(event.getSourceId(), findPayment(), paymentId, event.getEventId());
         } catch (Exception e) {
             log.warn("Problem when get invoice info for event: {} change: {} status: {}", event,
-                    change, change.getInvoicePaymentChange().getPayload().isSetInvoicePaymentStatusChanged() ?
-                            change.getInvoicePaymentChange().getPayload().getInvoicePaymentStatusChanged().getStatus() :
-                            "Unknown");
+                    change, change.getInvoicePaymentChange().getPayload().isSetInvoicePaymentStatusChanged()
+                            ? change.getInvoicePaymentChange().getPayload().getInvoicePaymentStatusChanged().getStatus()
+                            : "Unknown");
             throw e;
         }
     }
