@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>fraudbusters-mg-connector</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>fraudbusters-mg-connector</name>
@@ -64,7 +64,7 @@
         <dependency>
             <groupId>dev.vality</groupId>
             <artifactId>damsel</artifactId>
-            <version>1.678-09e4c72</version>
+            <version>1.682-dfd6648</version>
         </dependency>
         <dependency>
             <groupId>dev.vality</groupId>
