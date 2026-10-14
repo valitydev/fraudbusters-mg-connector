@@ -76,5 +76,3 @@ kafka:
 fb.stream:
   withdrawalEnabled: true
   invoiceEnabled: true
-
-spring.jackson.use-jackson2-defaults: true
